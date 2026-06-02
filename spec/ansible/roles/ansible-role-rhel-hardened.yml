@@ -1,0 +1,9 @@
+---
+- name: RHEL10 CIS hardening via ansible-lockdown/RHEL10-CIS
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    amzn2023cis_rule_4_6_6: false
+  roles:
+    - RHEL10-CIS

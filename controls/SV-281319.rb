@@ -1,0 +1,72 @@
+control 'SV-281319' do
+  title 'RHEL 10 must disable core dumps for all users.'
+  desc 'A core dump includes a memory image taken at the time the operating system terminates an application. The memory image could contain sensitive data and is generally useful only for developers trying to debug problems.'
+  desc 'check', %q(Note: If kernel dumps are disabled in accordance with RHEL-10-701090, this requirement is not applicable.
+
+Verify RHEL 10 disables core dumps for all users by issuing the following command:
+
+$ sudo grep -r core /etc/security/ | grep -v '#'
+/etc/security/limits.d/core_dumps.conf:* hard core 0
+
+This can be set as a global domain (with the * wildcard) but may be set differently for multiple domains.
+
+If the "core" item is missing or the value is anything other than "0", and the need for core dumps is not documented with the information system security officer as an operational requirement for all domains that have the "core" item assigned, this is a finding.)
+  desc 'fix', 'Configure RHEL 10 to disable core dumps for all users.
+
+Create or edit the setting in a drop-in configuration file:
+
+$ sudo vi /etc/security/limits.d/core_dumps.conf
+
+Add the following line:
+
+* hard core 0
+
+Remove any entries for users or groups with a value set to anything other than "0".'
+  impact 0.5
+  tag severity: 'medium'
+  tag gtitle: 'SRG-OS-000095-GPOS-00049'
+  tag gid: 'V-281319'
+  tag rid: 'SV-281319r1184633_rule'
+  tag stig_id: 'RHEL-10-701170'
+  tag fix_id: 'F-85785r1184632_fix'
+  tag cci: ['CCI-000366', 'CCI-000381']
+  tag legacy: []
+  tag nist: ['CM-6 b', 'CM-7 a']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('core_dumps_required')
+    impact 0.0
+    describe 'N/A' do
+      skip "Profile inputs indicate that this parameter's setting is a documented operational requirement"
+    end
+  else
+
+    setting = 'core'
+    expected_value = input('core_dump_expected_value')
+
+    limits_files = command('ls /etc/security/limits.d/*.conf').stdout.strip.split
+    limits_files.append('/etc/security/limits.conf')
+
+    # make sure that at least one limits.conf file has the correct setting
+    globally_set = limits_files.any? { |lf| !limits_conf(lf).read_params['*'].nil? && limits_conf(lf).read_params['*'].include?(['hard', setting.to_s, expected_value.to_s]) }
+
+    # make sure that no limits.conf file has a value that contradicts the global set
+    failing_files = limits_files.select { |lf|
+      limits_conf(lf).read_params.values.flatten(1).any? { |l|
+        l[1].eql?(setting) && !l[2].to_i.eql?(expected_value)
+      }
+    }
+    describe 'Limits files' do
+      it 'should disallow core dumps by default' do
+        expect(globally_set).to eq(true), "No correct global ('*') setting found"
+      end
+      it 'should not have any conflicting settings' do
+        expect(failing_files).to be_empty, "Files with incorrect '#{setting}' settings:\n\t- #{failing_files.join("\n\t- ")}"
+      end
+    end
+  end
+end

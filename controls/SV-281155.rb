@@ -1,0 +1,47 @@
+control 'SV-281155' do
+  title 'RHEL 10 must generate audit records for all account creations, modifications, disabling, and termination events that affect the "/etc/sudoers.d/" directory.'
+  desc 'The actions taken by system administrators must be audited to keep a record of what was executed on the system, as well as for accountability purposes. Editing the "sudoers" file may be a sign of an attacker trying to establish persistent methods to a system. Auditing the editing of the "sudoers" files mitigates this risk.'
+  desc 'check', 'Verify RHEL 10 generates audit records for all account creations, modifications, disabling, and termination events that affect "/etc/sudoers.d/" with the following command:
+
+$ sudo auditctl -l | grep /etc/sudoers.d
+-a always,exit -F arch=b32 -F path=/etc/sudoers.d/ -F perm=wa -F key=identity
+-a always,exit -F arch=b64 -F path=/etc/sudoers.d/ -F perm=wa -F key=identity
+
+If the command does not return a line, or the line is commented out, this is a finding.'
+  desc 'fix', 'Configure RHEL 10 to generate audit records for all account creations, modifications, disabling, and termination events that affect "/etc/sudoers.d/".
+
+Add or update the following file system rule to "/etc/audit/rules.d/audit.rules":
+
+-a always,exit -F arch=b32 -F path=/etc/sudoers.d/ -F perm=wa -F key=identity
+-a always,exit -F arch=b64 -F path=/etc/sudoers.d/ -F perm=wa -F key=identity
+
+Restart the audit daemon with the following command for the changes to take effect:
+
+$ sudo service auditd restart'
+  impact 0.5
+  tag severity: 'medium'
+  tag gtitle: 'SRG-OS-000004-GPOS-00004'
+  tag satisfies: ['SRG-OS-000062-GPOS-00031', 'SRG-OS-000004-GPOS-00004', 'SRG-OS-000037-GPOS-00015', 'SRG-OS-000042-GPOS-00020', 'SRG-OS-000304-GPOS-00121', 'SRG-OS-000392-GPOS-00172', 'SRG-OS-000462-GPOS-00206', 'SRG-OS-000470-GPOS-00214', 'SRG-OS-000471-GPOS-00215', 'SRG-OS-000239-GPOS-00089', 'SRG-OS-000240-GPOS-00090', 'SRG-OS-000241-GPOS-00091', 'SRG-OS-000303-GPOS-00120', 'CCI-002884', 'SRG-OS-000466-GPOS-00210', 'SRG-OS-000476-GPOS-00221']
+  tag gid: 'V-281155'
+  tag rid: 'SV-281155r1197236_rule'
+  tag stig_id: 'RHEL-10-500690'
+  tag fix_id: 'F-85621r1166416_fix'
+  tag cci: ['CCI-000169', 'CCI-000018', 'CCI-000130', 'CCI-000135', 'CCI-000172', 'CCI-001403', 'CCI-001404', 'CCI-001405', 'CCI-002130', 'CCI-002132', 'CCI-002884', 'CCI-000015']
+  tag nist: ['AU-12 a', 'AC-2 (4)', 'AU-3 a', 'AU-3 (1)', 'AU-12 c', 'MA-4 (1) (a)', 'AC-2 (1)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  audit_command = '/etc/sudoers.d'
+
+  describe 'Command' do
+    it "#{audit_command} is audited properly" do
+      audit_rule = auditd.file(audit_command)
+      expect(audit_rule).to exist
+      expect(audit_rule.permissions.flatten).to include('w', 'a')
+      expect(audit_rule.key.uniq).to include(input('audit_rule_keynames').merge(input('audit_rule_keynames_overrides'))[audit_command])
+    end
+  end
+end

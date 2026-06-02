@@ -1,0 +1,40 @@
+control 'SV-281330' do
+  title 'RHEL 10 must map the authenticated identity to the user or group account for public key infrastructure (PKI)-based authentication.'
+  desc 'Without mapping the certificate used to authenticate to the user account, the ability to determine the identity of the individual user or group will not be available for forensic analysis.'
+  desc 'check', 'Note: If the system administrator (SA) demonstrates the use of an approved alternate multifactor authentication method, this requirement is not applicable.
+
+Verify RHEL 10 maps the authenticated identity to the user or group account for PKI-based authentication.
+
+Verify the certificate of the user or group is mapped to the corresponding user or group in the "sssd.conf" file with the following command:
+
+$ sudo find /etc/sssd/sssd.conf /etc/sssd/conf.d/ -type f -exec cat {} \\;
+[certmap/testing.test/rule_name]
+matchrule =<SAN>.*EDIPI@mil
+maprule = (userCertificate;binary={cert!bin})
+domains = testing.test
+
+If the certmap section does not exist, ask the SA to indicate how certificates are mapped to accounts.
+
+If there is no evidence of certificate mapping, this is a finding.'
+  desc 'fix', 'Configure RHEL 10 to map the authenticated identity to the user or group account by adding or modifying the certmap section of the "/etc/sssd/sssd.conf" file based on the following example:
+
+[certmap/testing.test/rule_name]
+matchrule = .*EDIPI@mil
+maprule = (userCertificate;binary={cert!bin})
+domains = testing.test
+
+Restart the "sssd" service with the following command for the changes to take effect:
+
+$ sudo systemctl restart sssd.service'
+  impact 0.5
+  tag check_id: 'C-85891r1167138_chk'
+  tag severity: 'medium'
+  tag gid: 'V-281330'
+  tag rid: 'SV-281330r1167140_rule'
+  tag stig_id: 'RHEL-10-701280'
+  tag gtitle: 'SRG-OS-000068-GPOS-00036'
+  tag fix_id: 'F-85796r1167139_fix'
+  tag 'documentable'
+  tag cci: ['CCI-000187']
+  tag nist: ['IA-5 (2) (a) (2)']
+end

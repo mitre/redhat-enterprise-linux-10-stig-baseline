@@ -1,0 +1,57 @@
+control 'SV-281203' do
+  title 'RHEL 10 must limit the number of concurrent sessions to 10 for all accounts and/or account types.'
+  desc 'Operating system management includes the ability to control the number of users and user sessions that use an operating system. Limiting the number of allowed users and sessions per user is helpful in reducing the risks related to denial-of-service (DoS) attacks.
+
+This requirement addresses concurrent sessions for information system accounts and does not address concurrent sessions by single users via multiple system accounts. The maximum number of concurrent sessions should be defined based on mission needs and the operational environment for each system.'
+  desc 'check', %q(Verify RHEL 10 limits the number of concurrent sessions to "10" for all accounts and/or account types with the following command:
+
+$ sudo grep -rs maxlogins /etc/security/limits.conf /etc/security/limits.d/*.conf | grep -v '#'
+/etc/security/limits.d/maxlogins.conf:* hard maxlogins 10
+
+This can be set as a global domain (with the * wildcard) but may be set differently for multiple domains.
+
+If the "maxlogins" item is missing or commented out, or the value is set greater than "10" and is not documented with the information system security officer as an operational requirement for all domains that have the "maxlogins" item assigned, this is a finding.)
+  desc 'fix', 'Configure RHEL 10 to limit the number of concurrent sessions to "10" for all accounts and/or account types.
+
+Add the following line to the top of "/etc/security/limits.conf" or in a ".conf" file defined in "/etc/security/limits.d/":
+
+* hard maxlogins 10'
+  impact 0.3
+  tag severity: 'low'
+  tag gtitle: 'SRG-OS-000027-GPOS-00008'
+  tag gid: 'V-281203'
+  tag rid: 'SV-281203r1166561_rule'
+  tag stig_id: 'RHEL-10-600475'
+  tag fix_id: 'F-85669r1166560_fix'
+  tag cci: ['CCI-000054']
+  tag nist: ['AC-10']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  setting = 'maxlogins'
+  expected_value = input('concurrent_sessions_permitted')
+
+  limits_files = command('ls /etc/security/limits.d/*.conf').stdout.strip.split
+  limits_files.append('/etc/security/limits.conf')
+
+  # make sure that at least one limits.conf file has the correct setting
+  globally_set = limits_files.any? { |lf| !limits_conf(lf).read_params['*'].nil? && limits_conf(lf).read_params['*'].include?(['hard', setting.to_s, expected_value.to_s]) }
+
+  # make sure that no limits.conf file has a value that contradicts the global set
+  failing_files = limits_files.select { |lf|
+    limits_conf(lf).read_params.values.flatten(1).any? { |l|
+      l[1].eql?(setting) && l[2].to_i > expected_value
+    }
+  }
+  describe 'Limits files' do
+    it "should limit concurrent sessions to #{expected_value} by default" do
+      expect(globally_set).to eq(true), "No global ('*') setting for concurrent sessions found"
+    end
+    it 'should not have any conflicting settings' do
+      expect(failing_files).to be_empty, "Files with incorrect '#{setting}' settings:\n\t- #{failing_files.join("\n\t- ")}"
+    end
+  end
+end

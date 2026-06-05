@@ -32,4 +32,19 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+
+  only_if('This control is Not Applicable to containers without SSH installed', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system) || directory('/etc/ssh').exist?
+  }
+
+  ssh_host_key_dirs = input('ssh_host_key_dirs').join(' ')
+  pub_keys = command("find #{ssh_host_key_dirs} -xdev -name '*.pub'").stdout.split("\n")
+  mode = input('ssh_pub_key_mode')
+  failing_keys = pub_keys.select { |key| file(key).more_permissive_than?(mode) }
+
+  describe 'All SSH public keys on the filesystem' do
+    it "should be less permissive than #{mode}" do
+      expect(failing_keys).to be_empty, "Failing keyfiles:\n\t- #{failing_keys.join("\n\t- ")}"
+    end
+  end
 end

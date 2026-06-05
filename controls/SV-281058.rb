@@ -24,4 +24,12 @@ $ sudo chmod 755 [FILE]'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+
+  failing_files = command("find -L #{input('system_command_dirs').join(' ')} -perm /0022 -exec ls -d {} \\;").stdout.split("\n")
+
+  describe 'System commands' do
+    it "should have mode '0755' or less permissive" do
+      expect(failing_files).to be_empty, "Files with excessive permissions:\n\t- #{failing_files.join("\n\t- ")}"
+    end
+  end
 end

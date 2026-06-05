@@ -27,4 +27,19 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  only_if('This control is Not Applicable to containers without SSH installed', impact: 0.0) {
+    !(virtualization.system.eql?('docker') && !directory('/etc/ssh').exist?)
+  }
+
+  ssh_host_key_dirs = input('ssh_host_key_dirs').join(' ')
+  priv_keys = command("find #{ssh_host_key_dirs} -xdev -name '*.pem'").stdout.split("\n")
+  mode = '0600'
+  failing_keys = priv_keys.select { |key| file(key).more_permissive_than?(mode) }
+
+  describe 'All SSH private keys on the filesystem' do
+    it "should be less permissive than #{mode}" do
+      expect(failing_keys).to be_empty, "Failing keyfiles:\n\t- #{failing_keys.join("\n\t- ")}"
+    end
+  end
 end

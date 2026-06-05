@@ -34,4 +34,15 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+
+  if %w[docker podman kubepods lxc].include?(virtualization.system) && !file('/etc/ssh/sshd_config').exist?
+    impact 0.0
+    describe 'Control not applicable - SSH is not installed within containerized RHEL' do
+      skip 'Control not applicable - SSH is not installed within containerized RHEL'
+    end
+  else
+    describe sshd_config do
+      its('PrintLastLog') { should cmp 'yes' }
+    end
+  end
 end

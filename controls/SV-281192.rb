@@ -23,4 +23,9 @@ If the account is associated with system commands or applications, the UID shoul
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe passwd.uids(0) do
+    its('users') { should cmp 'root' }
+    its('entries.length') { should eq 1 }
+  end
 end

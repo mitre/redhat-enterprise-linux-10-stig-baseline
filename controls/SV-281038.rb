@@ -24,4 +24,14 @@ $ sudo chgrp root [FILE]'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+
+  required_system_account_caveats = input('required_system_accounts').map { |acct| "-group #{acct}" }.join(' ')
+
+  failing_files = command("find -L #{input('system_command_dirs').join(' ')} ! #{required_system_account_caveats} -exec ls -d {} \\;").stdout.split("\n")
+
+  describe 'System commands' do
+    it 'should be group-owned by root' do
+      expect(failing_files).to be_empty, "Files not group-owned by root:\n\t- #{failing_files.join("\n\t- ")}"
+    end
+  end
 end

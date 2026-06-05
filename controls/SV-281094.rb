@@ -35,4 +35,18 @@ Replace "[audit_tool]" with each audit tool that has a mode more permissive than
   tag 'documentable'
   tag cci: ['CCI-001493', 'CCI-001494', 'CCI-001495']
   tag nist: ['AU-9 a', 'AU-9', 'AU-9']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  audit_tools = input('audit_tools')
+
+  failing_tools = audit_tools.select { |at| file(at).more_permissive_than?(input('audit_tool_mode')) }
+
+  describe 'Audit executables' do
+    it "should be no more permissive than '#{input('audit_tool_mode')}'" do
+      expect(failing_tools).to be_empty, "Failing tools:\n\t- #{failing_tools.join("\n\t- ")}"
+    end
+  end
 end

@@ -75,4 +75,20 @@ AIDE found NO differences between database and filesystem. Looks okay!!
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+
+  file_integrity_tool = input('file_integrity_tool')
+
+  only_if('Control not applicable within a container', impact: 0.0) do
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  end
+
+  if file_integrity_tool == 'aide'
+    describe command('/usr/sbin/aide --check') do
+      its('stdout') { should_not include "Couldn't open file" }
+    end
+  end
+
+  describe package(file_integrity_tool) do
+    it { should be_installed }
+  end
 end

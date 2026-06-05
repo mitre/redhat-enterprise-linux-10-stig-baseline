@@ -29,4 +29,24 @@ $ sudo dnf -y install openssh-server'
   tag 'documentable'
   tag cci: ['CCI-002418', 'CCI-002421', 'CCI-002420', 'CCI-002422']
   tag nist: ['SC-8', 'SC-8 (1)', 'SC-8 (2)', 'SC-8 (2)']
+
+  openssh_present = package('openssh-server').installed?
+
+  only_if('This requirement is Not Applicable in a container without OpenSSH installed or when physical protections are employed', impact: 0.0) do
+    openssh_present || input('physical_protections_employed') || !%w[docker podman kubepods lxc].include?(virtualization.system)
+  end
+
+  if input('allow_container_openssh_server') == false
+    describe 'In a container Environment' do
+      it 'the OpenSSH Server should be installed only when allowed in a container environment' do
+        expect(openssh_present).to eq(false), 'OpenSSH Server is installed but not approved for the container environment'
+      end
+    end
+  else
+    describe 'OpenSSH Server package' do
+      it 'should be installed' do
+        expect(package('openssh-server').installed?).to eq(true), 'OpenSSH Server is not installed'
+      end
+    end
+  end
 end

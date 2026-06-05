@@ -36,4 +36,11 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-000139', 'CCI-001855']
   tag nist: ['AU-5 a', 'AU-5 (1)']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+  describe auditd_conf do
+    its('action_mail_acct') { should cmp 'root' }
+  end
 end

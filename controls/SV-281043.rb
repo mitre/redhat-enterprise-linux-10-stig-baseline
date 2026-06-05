@@ -27,4 +27,12 @@ $ sudo chown root [cron config file]'
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+
+  failing_crontabs = command('find /etc/cron* ! -user root -print0').stdout.split("\0")
+
+  describe 'Crontabs' do
+    it 'should be owned by root' do
+      expect(failing_crontabs).to be_empty, "Failing crontabs:\n\t- #{failing_crontabs.join("\n\t- ")}"
+    end
+  end
 end

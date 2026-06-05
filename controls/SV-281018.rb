@@ -21,4 +21,9 @@ $ sudo chgrp root /etc/group'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe file('/etc/group') do
+    it { should exist }
+    its('group') { should cmp 'root' }
+  end
 end

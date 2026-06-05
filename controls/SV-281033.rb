@@ -23,4 +23,9 @@ $ sudo chown root /var/log'
   tag 'documentable'
   tag cci: ['CCI-001314']
   tag nist: ['SI-11 b']
+
+  describe directory('/var/log') do
+    it { should exist }
+    it { should be_owned_by 'root' }
+  end
 end

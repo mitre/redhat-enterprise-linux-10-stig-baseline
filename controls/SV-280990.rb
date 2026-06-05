@@ -27,4 +27,35 @@ $ sudo systemctl restart rsyslog.service'
   tag 'documentable'
   tag cci: ['CCI-000067']
   tag nist: ['AC-17 (1)']
+
+  only_if('Control not applicable; remote access not configured within containerized RHEL', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?
+  }
+
+  rsyslog = file('/etc/rsyslog.conf')
+
+  describe rsyslog do
+    it { should exist }
+  end
+
+  if rsyslog.exist?
+
+    auth_pattern = %r{^\s*[a-z.;*]*auth(,[a-z,]+)*\.\*\s*/*}
+    authpriv_pattern = %r{^\s*[a-z.;*]*authpriv(,[a-z,]+)*\.\*\s*/*}
+    daemon_pattern = %r{^\s*[a-z.;*]*daemon(,[a-z,]+)*\.\*\s*/*}
+
+    rsyslog_conf = command('grep -E \'(auth.*|authpriv.*|daemon.*)\' /etc/rsyslog.conf')
+
+    describe 'Logged remote access methods' do
+      it 'should include auth.*' do
+        expect(rsyslog_conf.stdout).to match(auth_pattern), 'auth.* not configured for logging'
+      end
+      it 'should include authpriv.*' do
+        expect(rsyslog_conf.stdout).to match(authpriv_pattern), 'authpriv.* not configured for logging'
+      end
+      it 'should include daemon.*' do
+        expect(rsyslog_conf.stdout).to match(daemon_pattern), 'daemon.* not configured for logging'
+      end
+    end
+  end
 end

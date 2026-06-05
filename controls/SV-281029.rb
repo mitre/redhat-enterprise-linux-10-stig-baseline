@@ -21,4 +21,9 @@ $ sudo chown root /etc/shadow'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe file('/etc/shadow') do
+    it { should exist }
+    it { should be_owned_by 'root' }
+  end
 end

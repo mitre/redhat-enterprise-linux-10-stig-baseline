@@ -22,4 +22,12 @@ $ sudo dnf -y install audispd-plugins'
   tag 'documentable'
   tag cci: ['CCI-001851']
   tag nist: ['AU-4 (1)']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe package('audispd-plugins') do
+    it { should be_installed }
+  end
 end

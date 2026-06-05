@@ -25,4 +25,30 @@ Create and assign home directories to all local interactive users on RHEL 10 tha
   tag 'documentable'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5 a']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  exempt_users = input('exempt_home_users')
+  ignore_shells = input('non_interactive_shells').join('|')
+  actvite_users_without_homedir = users.where { !shell.match(ignore_shells) && home.nil? }.entries
+
+  # only_if("This control is Not Applicable since no 'non-exempt' users were found", impact: 0.0) { !active_home.empty? }
+
+  describe 'All non-exempt users' do
+    it 'have an assinded home directory that exists' do
+      failure_message = "The following users do not have an assigned home directory: #{actvite_users_without_homedir.join(', ')}"
+      expect(actvite_users_without_homedir).to be_empty, failure_message
+    end
+  end
+  describe 'Note: `exempt_home_users` skipped user' do
+    exempt_users.each do |u|
+      next if exempt_users.empty?
+
+      it u.to_s do
+        expect(user(u).username).to be_truthy.or be_nil
+      end
+    end
+  end
 end

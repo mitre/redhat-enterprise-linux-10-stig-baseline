@@ -23,4 +23,9 @@ $ sudo chmod 0755 /var/log'
   tag 'documentable'
   tag cci: ['CCI-001314']
   tag nist: ['SI-11 b']
+
+  describe directory('/var/log') do
+    it { should exist }
+    it { should_not be_more_permissive_than('0755') }
+  end
 end

@@ -30,4 +30,17 @@ password sufficient pam_unix.so sha512'
   tag 'documentable'
   tag cci: ['CCI-004062', 'CCI-000803']
   tag nist: ['IA-5 (1) (d)', 'IA-7']
+
+  pam_auth_files = input('pam_auth_files')
+
+  if input('pam_config_included')
+    impact 0.0
+    describe 'N/A' do
+      skip 'The required PAM configuration is included or substacked from system-auth; this control is Not Applicable'
+    end
+  else
+    describe pam(pam_auth_files['system-auth']) do
+      its('lines') { should match_pam_rule('password sufficient pam_unix.so sha512') }
+    end
+  end
 end

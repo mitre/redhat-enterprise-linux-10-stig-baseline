@@ -39,4 +39,12 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-000765', 'CCI-000766']
   tag nist: ['IA-2 (1)', 'IA-2 (2)']
+
+  only_if('This control is Not Applicable to containers without SSH installed', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system) || directory('/etc/ssh').exist?
+  }
+
+  describe sshd_config do
+    its('PubkeyAuthentication') { should cmp 'yes' }
+  end
 end

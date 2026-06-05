@@ -34,4 +34,28 @@ Reboot the system for the settings to take effect.'
   tag 'documentable'
   tag cci: ['CCI-000381', 'CCI-001443']
   tag nist: ['CM-7 a', 'AC-18 (1)']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('bluetooth_installed')
+    if input('bluetooth_required')
+      impact 0.0
+      describe 'N/A' do
+        skip "Profile inputs indicate that this parameter's setting is a documented operational requirement"
+      end
+    else
+
+      describe kernel_module('bluetooth') do
+        it { should be_disabled }
+        it { should be_blacklisted }
+      end
+    end
+  else
+    impact 0.0
+    describe 'Device or operating system does not have a Bluetooth adapter installed' do
+      skip 'If the device or operating system does not have a Bluetooth adapter installed, this requirement is not applicable.'
+    end
+  end
 end

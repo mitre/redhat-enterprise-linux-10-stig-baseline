@@ -4,6 +4,6 @@
   become: true
   gather_facts: true
   vars:
-    amzn2023cis_rule_4_6_6: false
+    rhel10cis_authselect_custom_profile_name: rhel10_cis_profile
   roles:
     - RHEL10-CIS

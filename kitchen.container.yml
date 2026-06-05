@@ -6,8 +6,6 @@ provisioner:
 
 driver:
   name: dokken
-  pull_chef_image: false
-  chef_image: artifacts.mitre.org/docker-remote/chef/chef
   pull_platform_image: false
 
 transport:
@@ -19,7 +17,7 @@ platforms:
 suites:
   - name: vanilla
     driver:
-      image: <%= ENV['VANILLA_CONTAINER_IMAGE'] || "registry1.dso.mil/ironbank/redhat/ubi/ubi10:10.2" %>
+      image: <%= ENV['VANILLA_CONTAINER_IMAGE'] || "registry.access.redhat.com/ubi10/ubi:10.2" %>
     verifier:
       input_files:
         - container.vanilla.inputs.yml

@@ -1,4 +1,4 @@
-name: RHEL 9 LXD VM Testing Matrix
+name: RHEL 10 LXD VM Testing Matrix
 
 on:
   pull_request:
@@ -38,7 +38,7 @@ jobs:
           persist-credentials: false
 
       - name: Install and configure LXD
-        run: sudo ./.github/scripts/setup-lxd.sh
+        run: sudo bash ./.github/scripts/setup-lxd.sh
 
       - name: Set short git commit SHA
         run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV

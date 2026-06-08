@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Download a RHEL 9 QCOW2 from Red Hat Image Builder using the SSO
+# Download a RHEL 10 QCOW2 from Red Hat Image Builder using the SSO
 # client-credentials flow. Polls the compose endpoint until success or failure.
 #
 # Required env:

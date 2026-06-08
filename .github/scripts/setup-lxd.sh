@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install and configure LXD on a GitHub-hosted Ubuntu runner so we can launch
-# RHEL 9 VMs with IPv4 NAT to the runner's external interface.
+# RHEL 10 VMs with IPv4 NAT to the runner's external interface.
 #
 # Run as root (e.g. `sudo ./setup-lxd.sh`). No env-var inputs.
 #

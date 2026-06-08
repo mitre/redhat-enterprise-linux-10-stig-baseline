@@ -68,7 +68,7 @@ jobs:
           RH_SSO_CLIENT_ID: ${{ secrets.RH_SSO_CLIENT_ID }}
           RH_SSO_CLIENT_SECRET: ${{ secrets.RH_SSO_CLIENT_SECRET }}
           RH_COMPOSE_ID: ${{ secrets.RH_COMPOSE_ID }}
-        run: sudo bash ./.github/scripts/fetch-rhel-image.sh
+        run: bash ./.github/scripts/fetch-rhel-image.sh
 
       - name: Repackage QCOW2 with grown disk and fixed GPT for LXD
         run: |
@@ -85,19 +85,19 @@ jobs:
           architecture: x86_64
           creation_date: $(date +%s)
           properties:
-            description: "RHEL 9 Image Builder QCOW2"
+            description: "RHEL 10 Image Builder QCOW2"
             os: "rhel"
-            release: "9"
+            release: "10"
           type: virtual-machine
           EOF
           tar -cf metadata.tar metadata.yaml
-          lxc image import metadata.tar disk.qcow2 --alias rhel9-imagebuilder
+          lxc image import metadata.tar disk.qcow2 --alias rhel10-imagebuilder
 
       - name: Launch and wait for VM
         run: |
           set -euo pipefail
           NAME="${{ matrix.suite }}-${{ env.PLATFORM }}"
-          lxc launch rhel9-imagebuilder "$NAME" --vm -c limits.memory=4GiB
+          lxc launch rhel10-imagebuilder "$NAME" --vm -c limits.memory=4GiB
           for i in $(seq 1 30); do
             lxc list --format=csv | grep -q "$NAME.*RUNNING" && break
             sleep 10

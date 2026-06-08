@@ -68,7 +68,7 @@ jobs:
           RH_SSO_CLIENT_ID: ${{ secrets.RH_SSO_CLIENT_ID }}
           RH_SSO_CLIENT_SECRET: ${{ secrets.RH_SSO_CLIENT_SECRET }}
           RH_COMPOSE_ID: ${{ secrets.RH_COMPOSE_ID }}
-        run: ./.github/scripts/fetch-rhel-image.sh
+        run: sudo bash ./.github/scripts/fetch-rhel-image.sh
 
       - name: Repackage QCOW2 with grown disk and fixed GPT for LXD
         run: |

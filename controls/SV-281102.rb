@@ -37,7 +37,8 @@ The setting will be applied on reboot.'
 
   grubby = command('grubby --info=ALL').stdout
 
-  arg_match = parse_config(grubby)['args'].match(/audit_backlog_limit\s*=\s*(?<actual_audit_backlog_limit>\d+)/)
+  grubby_args = parse_config(grubby)['args'].to_s
+  arg_match = grubby_args.match(/audit_backlog_limit\s*=\s*(?<actual_audit_backlog_limit>\d+)/)
 
   describe 'Audit backlog limit' do
     it 'should be set' do

@@ -22,4 +22,10 @@ $ sudo dnf -y install cronie'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+  tag 'host'
+  tag 'container'
+
+  describe package('cronie') do
+    it { should be_installed }
+  end
 end

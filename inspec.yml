@@ -877,6 +877,12 @@ inputs:
     type: Boolean
     value: false
 
+  # SV-280948
+  - name: unbound_required
+    description: Set to true if there is a documented requirement for the target system to use unbound as a DNS service
+    type: Boolean
+    value: false
+
   # SV-257833
   - name: iprutils_required
     description: Set to true if there is a documented requirement for the target system to use iprutils
@@ -886,6 +892,12 @@ inputs:
   # SV-257834
   - name: tuned_required
     description: Set to true if there is a documented requirement for the target system to use tuned
+    type: Boolean
+    value: false
+
+  # SV-280950
+  - name: gdm_required
+    description: Set to true if there is a documented requirement for the target system to use GDM
     type: Boolean
     value: false
 

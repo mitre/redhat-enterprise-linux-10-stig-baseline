@@ -25,16 +25,11 @@ $ sudo dnf -y remove tftp'
   tag nist: ['IA-5 (1) (c)']
 
   if input('tftp_required')
-    describe package('tftp-server') do
+    describe package('tftp') do
       it { should be_installed }
     end
-
-    describe file('/usr/lib/systemd/system/tftp.service') do
-      it { should exist }
-      its('content') { should match(/ExecStart=.*\s-s(\s|$)/) }
-    end
   else
-    describe package('tftp-server') do
+    describe package('tftp') do
       it { should_not be_installed }
     end
   end

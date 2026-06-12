@@ -39,7 +39,7 @@ $ sudo service auditd restart'
   tag cci: ['CCI-000130', 'CCI-000135', 'CCI-000169', 'CCI-002884', 'CCI-000172']
   tag nist: ['AU-3 a', 'AU-3 (1)', 'AU-12 a', 'MA-4 (1) (a)', 'AU-12 c']
 
-  audit_syscalls = ['chown']
+  audit_syscalls = ['chown', 'fchown', 'fchownat', 'lchown']
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

@@ -36,7 +36,7 @@ difok = 8'
   expected_value = input('difok')
 
   pattern = /^[^#]*#{setting}\s*=\s*(?<value>\d+)$/
-  setting_check = command("grep #{setting} /etc/security/pwquality.conf /etc/security/pwquality.conf/*.conf").stdout.strip.scan(pattern).flatten
+  setting_check = command("grep #{setting} /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf").stdout.strip.scan(pattern).flatten
 
   describe 'Password settings for the root account' do
     it 'should be set' do

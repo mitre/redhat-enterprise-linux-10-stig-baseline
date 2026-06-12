@@ -22,4 +22,8 @@ $ sudo dnf -y install policycoreutils-python-utils'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+
+  describe package('policycoreutils-python-utils') do
+    it { should be_installed }
+  end
 end

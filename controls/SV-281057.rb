@@ -21,4 +21,9 @@ $ sudo chgrp root /etc/audit/'
   tag 'documentable'
   tag cci: ['CCI-000171']
   tag nist: ['AU-12 b']
+
+  describe file('/etc/audit/') do
+    it { should exist }
+    its('group') { should cmp 'root' }
+  end
 end

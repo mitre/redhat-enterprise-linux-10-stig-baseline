@@ -20,4 +20,12 @@ Edit the file "/etc/group", and provide each group that has a duplicate GID with
   tag 'documentable'
   tag cci: ['CCI-000764']
   tag nist: ['IA-2']
+
+  duplicate_gids = command('cut -d : -f 3 /etc/group | uniq -d').stdout.strip.split
+
+  describe 'All GIDs' do
+    it 'should be unique' do
+      expect(duplicate_gids).to be_empty, "GIDs with more than one group name:\n\t- #{duplicate_gids.join("\n\t- ")}"
+    end
+  end
 end

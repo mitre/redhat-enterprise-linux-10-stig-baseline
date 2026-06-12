@@ -328,9 +328,20 @@ class Pam < Inspec.resource(1)
     def match?(to_cmp)
       to_cmp = Pam::Rule.new(to_cmp, { service_name: @service }) if to_cmp.is_a?(String)
 
+      return false unless instance_of?(to_cmp.class)
+      return false unless [
+        @service,
+        @type,
+        @control,
+        @module_path,
+        to_cmp.service,
+        to_cmp.type,
+        to_cmp.control,
+        to_cmp.module_path,
+      ].all?
+
       # The simple match first
-      instance_of?(to_cmp.class) &&
-        @service.match(Regexp.new("^#{to_cmp.service}$")) &&
+      @service.match(Regexp.new("^#{to_cmp.service}$")) &&
         @type.match(Regexp.new("^#{to_cmp.type}$")) &&
         @control.match(Regexp.new("^#{to_cmp.control.gsub(/(\[|\])/, '\\\\\\1')}$")) &&
         @module_path.match(Regexp.new("^#{to_cmp.module_path}$")) &&

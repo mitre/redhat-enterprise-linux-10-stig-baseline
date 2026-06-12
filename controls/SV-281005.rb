@@ -27,4 +27,19 @@ $ sudo dnf -y install pkcs11-provider'
   tag 'documentable'
   tag cci: ['CCI-000765', 'CCI-004046', 'CCI-001954']
   tag nist: ['IA-2 (1)', 'IA-2 (6) (a)', 'IA-2 (12)']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('alternate_mfa_method') == ''
+    describe package('pkcs11-provider') do
+      it { should be_installed }
+    end
+  else
+    impact 0.0
+    describe 'N/A' do
+      skip 'The system is using an approved alternative MFA method; this control is Not Applicable.'
+    end
+  end
 end

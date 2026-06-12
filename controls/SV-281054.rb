@@ -49,4 +49,14 @@ $ sudo chmod 0400 $log_file.*'
   tag 'documentable'
   tag cci: ['CCI-000162', 'CCI-000163', 'CCI-000164', 'CCI-001314']
   tag nist: ['AU-9 a', 'AU-9 a', 'AU-9 a', 'SI-11 b']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  log_file = auditd_conf('/etc/audit/auditd.conf').log_file
+
+  describe file(log_file) do
+    it { should_not be_more_permissive_than('0600') }
+  end
 end

@@ -5,5 +5,9 @@
   gather_facts: true
   vars:
     rhel10cis_authselect_custom_profile_name: rhel10_cis_profile
+    rhel10cis_sudoers_exclude_nopasswd_list:
+      - ec2-user
+      - vagrant
+      - rhel
   roles:
     - RHEL10-CIS

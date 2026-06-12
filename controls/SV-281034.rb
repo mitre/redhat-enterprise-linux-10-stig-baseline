@@ -23,4 +23,9 @@ $ sudo chgrp root /var/log'
   tag 'documentable'
   tag cci: ['CCI-001314']
   tag nist: ['SI-11 b']
+
+  describe directory('/var/log') do
+    it { should exist }
+    its('group') { should eq 'root' }
+  end
 end

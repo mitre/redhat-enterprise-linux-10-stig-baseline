@@ -23,4 +23,13 @@ $ sudo systemctl enable --now systemd-journald'
   tag 'documentable'
   tag cci: ['CCI-001665']
   tag nist: ['SC-24']
+
+  only_if('Control not applicable within a container without sudo enabled', impact: 0.0) do
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  end
+
+  describe service('systemd-journald') do
+    it { should be_enabled }
+    it { should be_running }
+  end
 end

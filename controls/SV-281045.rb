@@ -24,4 +24,15 @@ $ sudo chown [root or system account] [Public Directory]'
   tag 'documentable'
   tag cci: ['CCI-001090']
   tag nist: ['SC-4']
+
+  partitions = etc_fstab.params.map { |partition| partition['mount_point'] }.uniq
+
+  cmd = "find #{partitions.join(' ')} -xdev -type d -perm -0002 -uid +999 -print"
+  failing_dirs = command(cmd).stdout.split("\n").uniq
+
+  describe 'Any world-writeable directories' do
+    it 'should be owned by system accounts' do
+      expect(failing_dirs).to be_empty, "Failing directories:\n\t- #{failing_dirs.join("\n\t- ")}"
+    end
+  end
 end

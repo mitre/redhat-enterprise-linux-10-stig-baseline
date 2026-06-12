@@ -32,4 +32,23 @@ $ sudo systemctl enable --now firewalld'
   tag 'documentable'
   tag cci: ['CCI-000382', 'CCI-002314']
   tag nist: ['CM-7 b', 'AC-17 (1)']
+
+  only_if('This requirment is Not Applicable in the container, the container management platform manages the firewall service', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('external_firewall')
+    message = 'This system uses an externally managed firewall service, verify with the system administrator that the firewall is configured to requirements'
+    describe message do
+      skip message
+    end
+  else
+    describe package('firewalld') do
+      it { should be_installed }
+    end
+    describe firewalld do
+      it { should be_installed }
+      it { should be_running }
+    end
+  end
 end

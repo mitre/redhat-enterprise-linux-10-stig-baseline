@@ -21,4 +21,16 @@ $ sudo dnf -y remove gdm'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+  tag 'host'
+  tag 'container'
+
+  if input('gdm_required')
+    describe package('gdm') do
+      it { should be_installed }
+    end
+  else
+    describe package('gdm') do
+      it { should_not be_installed }
+    end
+  end
 end

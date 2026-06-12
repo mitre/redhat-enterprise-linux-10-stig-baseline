@@ -24,7 +24,7 @@ $ sudo chmod 0644 /etc/passwd-'
   tag 'host'
   tag 'container'
 
-  system_file = '/etc/group'
+  system_file = '/etc/passwd-'
 
   mode = input('expected_modes')[system_file]
 

@@ -31,4 +31,8 @@ minlen = 15'
   tag 'documentable'
   tag cci: ['CCI-004066']
   tag nist: ['IA-5 (1) (h)']
+
+  describe parse_config_file('/etc/security/pwquality.conf') do
+    its('minlen.to_i') { should cmp >= input('pass_min_len') }
+  end
 end

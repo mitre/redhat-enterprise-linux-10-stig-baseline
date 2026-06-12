@@ -22,4 +22,24 @@ $ sudo chown <user> <file>'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  if input('disable_slow_controls')
+    describe 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute.' do
+      skip 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute. You must enable this control for a full accredidation for production.'
+    end
+  else
+
+    failing_files = Set[]
+
+    command('grep -v "nodev" /proc/filesystems | awk \'NF{ print $NF }\'')
+      .stdout.strip.split("\n").each do |fs|
+      failing_files += command("find / -xdev -xautofs -fstype #{fs} -nouser").stdout.strip.split("\n")
+    end
+
+    describe 'All local files and directories' do
+      it 'should have an owner' do
+        expect(failing_files).to be_empty, "Files with no owner:\n\t- #{failing_files.join("\n\t- ")}"
+      end
+    end
+  end
 end

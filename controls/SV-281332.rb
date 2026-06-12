@@ -35,4 +35,19 @@ $ sudo firewall-cmd --permanent --add-service=service_name'
   tag 'documentable'
   tag cci: ['CCI-000382', 'CCI-002314']
   tag nist: ['CM-7 b', 'AC-17 (1)']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  firewalld_properties = input('firewalld_properties')
+
+  describe firewalld do
+    it { should be_running }
+  end
+  describe firewalld do
+    its('ports') { should cmp [firewalld_properties['ports']] }
+    its('protocols') { should cmp [firewalld_properties['protocols']] }
+    its('services') { should cmp [firewalld_properties['services']] }
+  end
 end

@@ -21,4 +21,21 @@ $ sudo systemctl set-default multi-user.target'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+
+  only_if('This requirement is Not Applicable inside the container', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('gui_required')
+    impact 0.0
+    describe 'skip' do
+      skip 'A GUI is indicated as a requirement for this system. This control is Not Applicable.'
+    end
+  else
+    get_default = command('systemctl get-default').stdout.strip
+
+    describe get_default do
+      it { should cmp 'multi-user.target' }
+    end
+  end
 end

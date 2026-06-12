@@ -22,4 +22,12 @@ $ rpm --setperms cronie crontabs'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+
+  output = command(%q(rpm --verify cronie crontabs | awk '! ($2 == "c" && $1 ~ /^.\..\.\.\.\..\./) {print $0}')).stdout.strip
+
+  describe 'Cron configuration files and directories' do
+    it 'match the OS default owner, group, and mode' do
+      expect(output).to be_empty, "Failing configuration files and directories:\n#{output}"
+    end
+  end
 end

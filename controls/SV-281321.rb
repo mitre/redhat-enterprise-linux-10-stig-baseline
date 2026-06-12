@@ -34,4 +34,18 @@ $ sudo grubby --update-kernel=ALL --remove-args=noexec'
   tag 'documentable'
   tag cci: ['CCI-002824']
   tag nist: ['SI-16']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  grep_output = command("grep ^flags /proc/cpuinfo | grep -Ev '([^[:alnum:]])(nx)([^[:alnum:]]|$)'").stdout.strip
+  grubby_output = command("grubby --info=ALL | grep args | grep -E '([^[:alnum:]])(noexec)([^[:alnum:]])'").stdout.strip
+
+  describe 'ExecShield' do
+    it 'is enabled on 64-bit RHEL 10 systems' do
+      expect(grep_output).to be_empty
+      expect(grubby_output).to be_empty
+    end
+  end
 end

@@ -40,4 +40,15 @@ Created symlink '/etc/systemd/system/kdump.service' ? '/dev/null'."
   tag 'documentable'
   tag cci: ['CCI-001665']
   tag nist: ['SC-24']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe service('kdump') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+    its('params.LoadState') { should cmp 'masked' }
+    its('params.UnitFileState') { should cmp 'masked' }
+  end
 end

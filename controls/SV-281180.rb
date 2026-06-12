@@ -27,4 +27,14 @@ PASS_MIN_DAYS 1'
   tag 'documentable'
   tag cci: ['CCI-004066']
   tag nist: ['IA-5 (1) (h)']
+
+  value = input('pass_min_days')
+  setting = input_object('pass_min_days').name.upcase
+
+  describe "/etc/login.defs does not have `#{setting}` configured" do
+    let(:config) { login_defs.read_params[setting] }
+    it "greater than #{value} day" do
+      expect(config).to cmp <= value
+    end
+  end
 end

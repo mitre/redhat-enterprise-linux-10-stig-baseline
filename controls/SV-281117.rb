@@ -42,4 +42,28 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-000130', 'CCI-000135', 'CCI-000169', 'CCI-002884', 'CCI-000172']
   tag nist: ['AU-3 a', 'AU-3 (1)', 'AU-12 a', 'MA-4 (1) (a)', 'AU-12 c']
+
+  audit_syscalls = ['setxattr', 'fsetxattr', 'lsetxattr', 'removexattr', 'fremovexattr', 'lremovexattr']
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe 'Syscall' do
+    audit_syscalls.each do |audit_syscall|
+      it "#{audit_syscall} is audited properly" do
+        audit_rule = auditd.syscall(audit_syscall)
+        expect(audit_rule).to exist
+        expect(audit_rule.action.uniq).to cmp 'always'
+        expect(audit_rule.list.uniq).to cmp 'exit'
+        if os.arch.match(/64/)
+          expect(audit_rule.arch.uniq).to include('b32', 'b64')
+        else
+          expect(audit_rule.arch.uniq).to cmp 'b32'
+        end
+        expect(audit_rule.fields.flatten).to include('auid>=1000', 'auid!=-1')
+        expect(audit_rule.key.uniq).to include(input('audit_rule_keynames').merge(input('audit_rule_keynames_overrides'))[audit_syscall])
+      end
+    end
+  end
 end

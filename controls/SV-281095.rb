@@ -22,4 +22,32 @@ $ sudo chmod 0755 <file>'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+
+  if input('disable_slow_controls')
+    describe 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute.' do
+      skip 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute. You must enable this control for a full accredidation for production.'
+    end
+  else
+
+    # get all world-writeable programs
+    mount_points = etc_fstab.mount_point.join(' ')
+    ww_programs = command("find #{mount_points} -xdev -type f -perm -0002 -print").stdout.split.join('|')
+
+    # get all homedirs
+    interactive_users = passwd.where { uid.to_i >= 1000 && shell !~ /nologin/ }
+
+    interactive_user_homedirs = interactive_users.homes.map { |home_path| home_path.match(%r{^(.*)/.*$}).captures.first }.uniq
+
+    # get all init files (.*) in homedirs
+    init_files = command("find #{interactive_user_homedirs.join(' ')} -xdev -maxdepth 2 -name '.*' ! -name '.bash_history' -type f").stdout.split("\n")
+
+    # check for ww programs in the init files
+    init_files_invoking_ww = ww_programs.empty? ? [] : init_files.select { |i| file(i).content.lines.any? { |line| line.match(/^#{ww_programs}/) } }
+
+    describe 'Interactive user initialization files' do
+      it 'should not invoke world-writeable programs' do
+        expect(init_files_invoking_ww).to be_empty, "Failing init files:\n\t- #{init_files_invoking_ww.join("\n\t- ")}"
+      end
+    end
+  end
 end

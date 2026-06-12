@@ -34,4 +34,12 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+
+  only_if('This requirement is Not Applicable inside a container, the containers host manages the containers filesystems') {
+    !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?
+  }
+
+  describe sshd_config do
+    its('PermitUserEnvironment') { should eq 'no' }
+  end
 end

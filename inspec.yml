@@ -877,6 +877,12 @@ inputs:
     type: Boolean
     value: false
 
+  # SV-280948
+  - name: unbound_required
+    description: Set to true if there is a documented requirement for the target system to use unbound as a DNS service
+    type: Boolean
+    value: false
+
   # SV-257833
   - name: iprutils_required
     description: Set to true if there is a documented requirement for the target system to use iprutils
@@ -886,6 +892,12 @@ inputs:
   # SV-257834
   - name: tuned_required
     description: Set to true if there is a documented requirement for the target system to use tuned
+    type: Boolean
+    value: false
+
+  # SV-280950
+  - name: gdm_required
+    description: Set to true if there is a documented requirement for the target system to use GDM
     type: Boolean
     value: false
 
@@ -970,6 +982,7 @@ inputs:
       'unlink'                        : 'delete',
       'rmdir'                         : 'delete',
       'renameat'                      : 'delete',
+      'renameat2'                     : 'delete',
       'unlinkat'                      : 'delete',
       '/usr/bin/gpasswd'              : 'privileged-gpasswd',
       'delete_module'                 : 'module_chng',
@@ -988,6 +1001,7 @@ inputs:
       'chmod'                         : 'perm_mod',
       'fchmod'                        : 'perm_mod',
       'fchmodat'                      : 'perm_mod',
+      'fchmodat2'                     : 'perm_mod',
       '/usr/bin/sudo'                 : 'priv_cmd',
       '/usr/sbin/usermod'             : 'privileged-usermod',
       '/usr/bin/chacl'                : 'perm_mod',

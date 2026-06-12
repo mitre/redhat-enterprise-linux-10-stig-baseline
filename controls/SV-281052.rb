@@ -33,4 +33,15 @@ Replace "[audit_log_file]" with the correct audit log path. By default this loca
   tag 'documentable'
   tag cci: ['CCI-000162', 'CCI-000163', 'CCI-000164', 'CCI-001314']
   tag nist: ['AU-9 a', 'AU-9 a', 'AU-9 a', 'SI-11 b']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  log_file = auditd_conf('/etc/audit/auditd.conf').log_file
+
+  describe file(log_file) do
+    its('owner') { should eq 'root' }
+  end
 end

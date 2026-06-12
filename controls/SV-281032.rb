@@ -21,4 +21,9 @@ $ sudo chgrp root /etc/shadow-'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+
+  describe file('/etc/shadow-') do
+    it { should exist }
+    its('group') { should cmp 'root' }
+  end
 end

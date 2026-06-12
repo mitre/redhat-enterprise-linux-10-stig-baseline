@@ -47,4 +47,18 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-000162', 'CCI-000163', 'CCI-000164']
   tag nist: ['AU-9 a', 'AU-9 a', 'AU-9 a']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  auditd_config = auditd_conf('/etc/audit/auditd.conf')
+  log_dir = File.dirname(auditd_config.log_file)
+  log_group = auditd_config.log_group
+  expected_mode = log_group.empty? || log_group == 'root' ? '0700' : '0750'
+
+  describe directory(log_dir) do
+    it { should_not be_more_permissive_than(expected_mode) }
+  end
 end

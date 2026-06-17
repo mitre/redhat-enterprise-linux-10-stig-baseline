@@ -28,27 +28,18 @@ If the installed version of RHEL 10 is not supported, this is a finding.'
   tag 'container'
 
   release = os.release
-
-  # Note that versions 9.0 and 9.2 of RHEL9 are within the EUS window at
-  # time of writing.
-
-  # 9.1 is not a EUS-supported release and is no longer officially supported
-  # by Red Hat. The date given for the expiration for 9.1 is based on the
-  # RHEL9 Planning Guide diagram found on Red Hat's Life Cycle page:
-  # https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates
-
   EOMS_DATE = {
-    /^9\.0/ => 'May 31, 2024',
-    /^9\.1/ => 'April 1, 2023',
-    /^9\.2/ => 'May 31, 2025',
-    /^9\.3/ => 'April 30, 2024',
-    /^9\.4/ => 'May 31, 2026',
-    /^9\.5/ => 'April 30, 2025',
-    /^9\.6/ => 'May 31, 2027',
-    /^9\.7/ => 'April 30, 2026',
-    /^9\.8/ => 'May 31, 2028',
-    /^9\.9/ => 'April 30, 2027',
-    /^9\.10/ => 'May 31, 2032'
+    /^10\.0(\D|$)/  => 'May 31, 2027',
+    /^10\.1(\D|$)/  => 'April 30, 2026',
+    /^10\.2(\D|$)/  => 'May 31, 2028',
+    /^10\.3(\D|$)/  => 'April 30, 2027',
+    /^10\.4(\D|$)/  => 'May 31, 2029',
+    /^10\.5(\D|$)/  => 'April 30, 2028',
+    /^10\.6(\D|$)/  => 'May 31, 2030',
+    /^10\.7(\D|$)/  => 'April 30, 2029',
+    /^10\.8(\D|$)/  => 'May 31, 2031',
+    /^10\.9(\D|$)/  => 'April 30, 2030',
+    /^10\.10(\D|$)/ => 'May 31, 2035'
   }.find { |k, _v| k.match(release) }&.last
 
   describe "The release \"#{release}\"" do

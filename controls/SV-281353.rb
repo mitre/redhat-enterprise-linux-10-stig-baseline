@@ -37,6 +37,10 @@ $ sudo sysctl --system'
   tag cci: ['CCI-002385', 'CCI-001108']
   tag nist: ['SC-5 a', 'SC-7 (4) (e)']
 
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
   only_if('This system is acting as a router on the network; this control is Not Applicable', impact: 0.0) {
     !input('network_router')
   }

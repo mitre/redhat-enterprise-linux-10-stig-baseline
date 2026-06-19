@@ -22,6 +22,10 @@ $ sudo chown root /etc/audit/'
   tag cci: ['CCI-000171']
   tag nist: ['AU-12 b']
 
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
   describe file('/etc/audit/') do
     it { should exist }
     it { should be_owned_by 'root' }

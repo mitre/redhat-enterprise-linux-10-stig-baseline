@@ -54,7 +54,7 @@ dictcheck=1'
     end
 
     it "sets `#{setting}` to #{expected_value}" do
-      expect(setting_value.first.to_i).to eq expected_value, "#{setting} is not set to #{expected_value} in pwquality.conf or pwquality.conf.d/*.conf"
+      expect(setting_value.first.to_i).to eq(expected_value), "#{setting} is not set to #{expected_value} in pwquality.conf or pwquality.conf.d/*.conf"
     end
   end
 end

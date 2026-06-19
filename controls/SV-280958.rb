@@ -23,7 +23,10 @@ $ sudo dnf -y install chrony'
   tag cci: ['CCI-001891', 'CCI-004923']
   tag nist: ['AU-8 (1) (a)', 'SC-45 (1) (a)']
   tag 'host'
-  tag 'container'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   describe package('chrony') do
     it { should be_installed }

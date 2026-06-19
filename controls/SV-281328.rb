@@ -53,7 +53,10 @@ $ sudo systemctl daemon-reload'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   tag 'host'
-  tag 'container'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   describe ini('/usr/lib/systemd/system/rescue.service') do
     its('Service.ExecStart') { should match %r{^-/usr/lib/systemd/systemd-sulogin-shell rescue$} }

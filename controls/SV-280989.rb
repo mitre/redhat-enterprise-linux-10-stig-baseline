@@ -41,7 +41,10 @@ $ sudo systemctl restart rsyslog'
   tag cci: ['CCI-001851']
   tag nist: ['AU-4 (1)']
   tag 'host'
-  tag 'container'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   streamdriver_check = command("grep -iEh 'StreamDriver[[:space:]]*=[[:space:]]*\"(gtls|ossl)\"' #{input('logging_conf_files').join(' ')} | grep -vE '^[[:space:]]*#'").stdout.strip
 

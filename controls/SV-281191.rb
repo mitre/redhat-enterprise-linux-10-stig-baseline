@@ -50,7 +50,7 @@ dictcheck=1'
     end
 
     it "only sets `#{setting}` once" do
-      expect(setting_value.length).to eq(1), "#{setting} is commented or set more than once in pwquality.conf or pwquality.conf.d/*.conf"
+      expect(setting_value.length).to eq(1), "#{setting} is set more than once in pwquality.conf or pwquality.conf.d/*.conf"
     end
 
     it "sets `#{setting}` to #{expected_value}" do

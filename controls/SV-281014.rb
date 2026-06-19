@@ -34,7 +34,7 @@ include /etc/crypto-policies/back-ends/libreswan.config'
 
   setting_check = command('grep include /etc/ipsec.conf /etc/ipsec.d/*.conf').stdout.strip.match?(/^.*:?[^#]include\s*#{expected_value}$/)
 
-  describe 'RHEL9 IPsec config' do
+  describe 'RHEL 10 IPsec config' do
     it "should include the conf file '#{expected_value}'" do
       expect(setting_check).to eq(true), "Conf file '#{expected_value}' not included in ipsec config"
     end

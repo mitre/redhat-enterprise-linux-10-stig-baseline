@@ -32,21 +32,19 @@ $ sudo systemctl mask --now autofs.service'
     !%w[docker podman kubepods lxc].include?(virtualization.system)
   }
 
-  no_gui = command('ls /usr/share/xsessions/*').stderr.match?(/No such file or directory/)
-
-  if no_gui
-    impact 0.0
-    describe 'The system does not have a GUI Desktop is installed; this control is Not Applicable' do
-      skip 'A GUI desktop is not installed; this control is Not Applicable.'
-    end
-  elsif input('gui_automount_required')
+  if input('autofs_required')
     impact 0.0
     describe 'N/A' do
-      skip "Profile inputs indicate that this parameter's setting is a documented operational requirement"
+      skip 'Profile inputs indicate that autofs is a documented operational requirement'
     end
   else
-    describe command('gsettings get org.gnome.desktop.media-handling automount-open') do
-      its('stdout.strip') { should cmp 'false' }
+    autofs_state = command('systemctl is-enabled autofs').stdout.strip
+    autofs_state = systemd_service('autofs').params.LoadState if autofs_state.empty? || autofs_state.start_with?('Failed ')
+
+    describe 'autofs service' do
+      it 'is disabled, masked, or not found' do
+        expect(%w[disabled masked not-found]).to include(autofs_state)
+      end
     end
   end
 end

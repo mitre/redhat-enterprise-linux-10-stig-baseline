@@ -26,7 +26,35 @@ dictcheck=1'
   tag 'host'
   tag 'container'
 
-  describe parse_config_file('/etc/security/pwquality.conf') do
-    its('dictcheck') { should eq '1' }
+  setting = 'dictcheck'
+  expected_value = 1
+
+  describe 'pwquality.conf settings' do
+    let(:config_files) do
+      ['/etc/security/pwquality.conf'] +
+        command("find /etc/security/pwquality.conf.d -maxdepth 1 -type f -name '*.conf' | sort").stdout.lines.map(&:strip)
+    end
+
+    let(:setting_value) do
+      config_files.flat_map do |path|
+        next [] unless file(path).file?
+
+        config = parse_config_file(path, multiple_values: true)
+        value = config.params[setting]
+        value.is_a?(Integer) ? [value] : Array(value)
+      end
+    end
+
+    it "has `#{setting}` set" do
+      expect(setting_value).not_to be_empty, "#{setting} is not set in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "only sets `#{setting}` once" do
+      expect(setting_value.length).to eq(1), "#{setting} is commented or set more than once in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "sets `#{setting}` to #{expected_value}" do
+      expect(setting_value.first.to_i).to eq expected_value, "#{setting} is not set to #{expected_value} in pwquality.conf or pwquality.conf.d/*.conf"
+    end
   end
 end

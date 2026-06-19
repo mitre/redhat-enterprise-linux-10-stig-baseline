@@ -28,21 +28,34 @@ lcredit = -1'
   tag 'host'
   tag 'container'
 
+  setting = 'lcredit'
+
   describe 'pwquality.conf settings' do
-    let(:config) { parse_config_file('/etc/security/pwquality.conf', multiple_values: true) }
-    let(:setting) { 'lcredit' }
-    let(:value) { Array(config.params[setting]) }
-
-    it 'has `lcredit` set' do
-      expect(value).not_to be_empty, 'lcredit is not set in pwquality.conf'
+    let(:config_files) do
+      ['/etc/security/pwquality.conf'] +
+        command("find /etc/security/pwquality.conf.d -maxdepth 1 -type f -name '*.conf' | sort").stdout.lines.map(&:strip)
     end
 
-    it 'only sets `lcredit` once' do
-      expect(value.length).to eq(1), 'lcredit is commented or set more than once in pwquality.conf'
+    let(:setting_value) do
+      config_files.flat_map do |path|
+        next [] unless file(path).file?
+
+        config = parse_config_file(path, multiple_values: true)
+        value = config.params[setting]
+        value.is_a?(Integer) ? [value] : Array(value)
+      end
     end
 
-    it 'does not set `lcredit` to a positive value' do
-      expect(value.first.to_i).to be < 0, 'lcredit is not set to a negative value in pwquality.conf'
+    it "has `#{setting}` set" do
+      expect(setting_value).not_to be_empty, "#{setting} is not set in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "only sets `#{setting}` once" do
+      expect(setting_value.length).to eq(1), "#{setting} is commented or set more than once in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "sets `#{setting}` to a negative value" do
+      expect(setting_value.first.to_i).to be < 0, "#{setting} is not set to a negative value in pwquality.conf or pwquality.conf.d/*.conf"
     end
   end
 end

@@ -35,7 +35,7 @@ supports:
 ###
 
 inputs:
-  # SV-258084, SV-258085, SV-258086, SV-258087, SV-258106
+  # SV-281207, SV-281208, SV-281209, SV-281210, SV-281211
   - name: sudoers_config_files
     description: 'The files and directories you keep your sudoers configs'
     type: Array
@@ -43,13 +43,13 @@ inputs:
       - '/etc/sudoers'
       - '/etc/sudoers.d/*'
 
-  # SV-258106
+  # SV-281211
   - name: passwordless_admins
     description: List of administrative groups permitted by ISSO to have NOPASSWD set in sudoers files
     type: Array
     value: []
 
-  # SV-257996, SV-258003
+  # SV-281254, SV-281296
   - name: sshd_config_values
     description: 'The agreed sshd server config values for the organization'
     type: Hash
@@ -57,13 +57,13 @@ inputs:
       GSSAPIAuthentication: 'no'
       ClientAliveInterval: '600'
 
-  # SV-257838, SV-258123, SV-258127, SV-258131, SV-258132
+  # SV-281005, SV-281325, SV-281326, SV-281329, SV-281330
   - name: alternate_mfa_method
     description: Name of the MFA method in place on the system (leave blank if using the default SSSD, give the name if using an approved alternate method)
     type: String
     value: ''
 
-  # SV-258122, SV-258123
+  # SV-281324, SV-281325
   - name: sssd_conf_files
     description: File and directory globs to check for SSSD configuration
     type: Array
@@ -71,7 +71,7 @@ inputs:
       - /etc/sssd/sssd.conf
       - /etc/sssd/conf.d/*.conf
 
-  # SV-258001, SV-258000
+  # SV-281085, SV-281253
   - name: ssh_host_key_dirs
     description: Directories where public host SSH keys for the server are stored
     type: Array
@@ -79,31 +79,31 @@ inputs:
       - /etc/ssh/
       - /home/
 
-  # SV-258001
+  # SV-281253
   - name: ssh_pub_key_mode
     description: All public ssh keyfiles on the filesystem should be equal or less permissive than this octet
     type: String
     value: '0644'
 
-  # SV-258000
+  # SV-281085
   - name: ssh_private_key_mode
     description: All private ssh keyfiles on the filesystem should be equal or less permissive than this octet
     type: String
-    value: '0640'
+    value: '0600'
 
-  # SV-258171
+  # SV-281101
   - name: audit_conf_mode
     description: All audit config files on the filesystem should be equal or less permissive than this octet
     type: String
     value: '0640'
 
-  # SV-257887
+  # SV-281094
   - name: audit_tool_mode
     description: All audit config tools on the filesystem should be equal or less permissive than this octet
     type: String
     value: '0755'
 
-  # SV-257888, SV-257890, SV-257891, SV-257892, SV-257893, SV-257894, SV-257895, SV-257896, SV-257897, SV-257933, SV-257934, SV-257999, SV-258172
+  # SV-281065, SV-281066, SV-281067, SV-281068, SV-281069, SV-281070, SV-281071, SV-281072, SV-281076, SV-281262, SV-281364
   - name: expected_modes
     description: Expected modes of system files and/or directories
     type: Hash
@@ -122,175 +122,163 @@ inputs:
       /etc/ssh/sshd_config: "0600"
       auditd_conf: "0640"
 
-  # SV-257889 TODO: fold this into expected_system_file_mode
+  # SV-281064
   - name: initialization_file_mode
     description: All initialization files (.bash_profile etc) should each have a mode equal to or less than this octet
     type: String
     value: '0740'
 
-  # SV-257889
+  # SV-281064
   - name: exempt_ini_files
     description: List of initialization files that are exempt from permissions checks
     type: Array
     value: []
 
-  # SV-257889
+  # SV-281064
   - name: alternate_ini_file_dirs
     description: List of directories, other than a user's homedir, to search for initialization files
     type: Array
     value: []
 
-  # SV-258157
+  # SV-281113
   - name: alert_method
     description: 'The method used to provide real-time information to the ISSO or AO'
     type: String
     value: email
 
-  # SV-258035, SV-258038
+  # SV-280962, SV-280964
   - name: peripherals_package
     description: "The name of the package used to managed connected peripherals"
     type: String
     value: "usbguard"
 
-  # SV-258036
+  # SV-280963
   - name: peripherals_service
     description: "The name of the service used to managed connected peripherals"
     type: String
     value: "usbguard"
 
-  # SV-257978, SV-257987, SV-257996, SV-258003
+  # SV-281001, SV-281254, SV-281296
   - name: allow_container_openssh_server
     description: "If the OpenSSH Server has been approved outside standard container guidance to default transprots"
     type: Boolean
     value: false
 
-  # SV-257978
+  # SV-281001
   - name: physical_protections_employed
-    descrption: "If physical means of protection are employed, then logical means (cryptography) do not have to be employed, and vice versa."
+    description: "If physical means of protection are employed, then logical means (cryptography) do not have to be employed, and vice versa."
     type: Boolean
     value: true
 
-  # SV-258113
+  # SV-281187
   - name: maxclassrepeat
     description: "The maximum number of repeating characters of the same character class for passwords"
     type: Numeric
     value: 4
 
-  # SV-258114
+  # SV-281188
   - name: maxrepeat
     description: "The maximum number of repeating characters when passwords are updated"
     type: Numeric
     value: 3
 
-  # SV-258115
+  # SV-281189
   - name: minclass
     description: "The minimum number of character classes that should change when passwords are updated"
     type: Numeric
     value: 4
 
-  # SV-258112
+  # SV-281185
   - name: difok
     description: "The minimum number of required changed characters when passwords are updated."
     type: Numeric
     value: 8
 
-  # SV-258104
+  # SV-281180
   - name: pass_min_days
     description: "The minimum password lifetime restriction in days"
     type: Numeric
     value: 1
 
-  # SV-258041, SV-258042
+  # SV-281169, SV-281170
   - name: pass_max_days
     description: "The maximum password lifetime restriction in days"
     type: Numeric
     value: 60
 
-  # SV-257843
+  # SV-280937
   - name: exempt_separate_filesystem
     description: "The system manages file system useage, LVM/XFS etc. or is managed by the service provider"
     type: Boolean
     value: false
 
-  # SV-257778, SV-257930, SV-257931, SV-258062
+  # SV-281074, SV-281075, SV-281095
   - name: disable_slow_controls
     description: Controls that are known to consistently have long run times can be disabled with this attribute
     type: Boolean
     value: false
 
-  # SV-257778
-  - name: disconnected_system
-    description: The system is not connected to the public internet or doesn't have access to a RPM package server
-    type: Boolean
-    value: false
-
-  # SV-257782, SV-258230, SV-258236, SV-258237
+  # SV-281009
   - name: use_fips
     description: "'(boolean)' Set to true if the system is required to use FIPS Encryption"
     type: Boolean
     value: true
 
-  # SV-257879
+  # SV-280935
   - name: data_at_rest_exempt
     description: "'(boolean) Set to true if the system is exempt from using Data at Rest"
     type: Boolean
     value: false
 
-  # SV-258241
-  - name: system_wide_crypto_policy
-    description: The system wide crypto policy
-    type: String
-    value: 'FIPS'
-
-  # SV-258091
+  # SV-281204
   - name: min_retry
     description: Number of permitted password retries
     type: Numeric
     value: 3
 
-  # SV-258107
+  # SV-281181
   - name: pass_min_len
     description: Minimum number of characters for a new password
     type: Numeric
     value: 15
 
-  # SV-258080
+  # SV-281252
   - name: faillock_tally
     description: The default SELinux security context type of the non-default tally directory
     type: String
     value: "faillog_t"
 
-  # SV-257969, SV-257970
+  # SV-281352, SV-281353
   - name: network_router
     description: This indicates if the system is acting as a rounter on the network
     type: Boolean
     value: false
 
-  # SV-257814
+  # SV-281319
   - name: core_dump_expected_value
     description: Expected value for the core dump setting
     type: Numeric
     value: 0
 
-  # SV-258069
+  # SV-281203
   - name: concurrent_sessions_permitted
     description: Number of permitted concurrent sessions on this system
     type: Numeric
     value: 10
 
-  # SV-257787, SV-257789, SV-257790, SV-257791, 
+  # SV-281086, SV-281087, SV-281166, SV-281167
   - name: grub_conf_path
     description: Grub config filepath
     type: String
     value: '/etc/grub2.cfg'
 
-  # SV-257787
+  # SV-281166
   - name: grub_user_conf_path
     description: Grub user config filepath
     type: String
     value: '/boot/grub2/user.cfg'
 
-  # SV-257789
+  # SV-281167
   - name: disallowed_grub_superusers
     description: List of default users that cannot be the default GRUB superuser
     type: Array
@@ -299,14 +287,14 @@ inputs:
       - admin
       - administrator
 
-  # SV-257890, SV-258042, SV-258044, SV-258050, SV-258051, SV-258052, SV-258053, SV-258105
+  # SV-281049, SV-281065, SV-281079, SV-281170, SV-281176, SV-281177, SV-281178, SV-281186
   - name: exempt_home_users
     description: Users exempt from home directory-based controls in array format
     type: Array
     value:
       - root
 
-  # SV-257843, SV-257889, SV-258046, SV-258048, SV-258050, SV-258051
+  # SV-280937, SV-281064, SV-281168, SV-281174, SV-281176, SV-281177
   - name: non_interactive_shells
     description: These shells do not allow a user to login
     type: Array
@@ -318,44 +306,38 @@ inputs:
       - "/bin/sync"
       - "/bin/true"
 
-  # SV-258046
+  # SV-281168
   - name: exempt_interactive_system_accounts
     description: System accounts that are exempt from the non-interactive shell requirement
     type: Array
     value:
       - root
 
-  # SV-258058
+  # SV-281199
   - name: user_accounts
     description: Accounts of known managed users
     type: Array
     value: []
 
-  # SV-257810, SV-257957, SV-257958, SV-257959, SV-257960, SV-257961, SV-257962, SV-257963, SV-257964, SV-257965, SV-257966, SV-257967, SV-257968, SV-257969, SV-257970
+  # SV-281335, SV-281340, SV-281341, SV-281342, SV-281343, SV-281344, SV-281345, SV-281346, SV-281347, SV-281348, SV-281349, SV-281350, SV-281351, SV-281352, SV-281353
   - name: ipv4_enabled
     description: Set to 'true' if IPv4 is enabled on the system.
     type: Boolean
     value: true
 
-  # SV-258054
-  - name: unsuccessful_attempts
-    description: The number of allowed failed login attempts
-    type: Numeric
-    value: 3
-
-  # SV-257971, SV-257972, SV-257973, SV-257973, SV-257974, SV-257975, SV-257976, SV-257977
+  # SV-281354, SV-281355, SV-281356, SV-281357, SV-281358, SV-281359, SV-281360
   - name: ipv6_enabled
     description: Set to 'true' if IPv6 is enabled on the system.
     type: Boolean
     value: true
 
-  # SV-258039
+  # SV-281289
   - name: bluetooth_installed
     description: "Device or operating system has a Bluetooth adapter installed"
     type: Boolean
     value: true
 
-  # SV-258058
+  # SV-281199
   - name: known_system_accounts
     description: System accounts that support approved system activities.
     type: Array
@@ -381,43 +363,37 @@ inputs:
       - systemd-bus-proxy
       - systemd-network
 
-  # SV-258019, SV-258121, SV-258122, SV-258124, SV-258125, SV-258126, SV-258131, SV-258133
+  # SV-280972, SV-280973, SV-280974, SV-280975, SV-280976, SV-281324, SV-281329
   - name: smart_card_enabled
     description: Set to true if smart cards are enabled for the system
     type: Boolean
     value: false
 
-  # SV-258134, SV-258135, SV-258136
+  # SV-280977, SV-280979, SV-280980
   - name: file_integrity_tool
     description: Name of tool
     type: String
     value: "aide"
 
-  # SV-257945
+  # SV-281336
   - name: authoritative_timeservers
     description: Timeserver(s) used in /etc/chrony.conf
     type: Array
     value: ["0.us.pool.ntp.mil"]
 
-  # SV-257945
+  # SV-281336
   - name: match_all_authoritative_timeservers_enabled
     description: Specify that all timeservers in authoritative_timeservers must be present and valid
     type: Boolean
     value: true
 
-  # SV-257858, SV-257857, SV-257859
-  - name: non_removable_media_fs
-    description: File systems listed in /etc/fstab which are not removable media devices
-    type: Array
-    value: ["/", "/tmp", "none", "/home", "/tmpfs"]
-
-  # SV-258127
+  # SV-281326
   - name: private_key_files
     description: List of full paths to private key files on the system
     type: Array
     value: []
 
-  # SV-258131
+  # SV-281329
   - name: root_ca_file
     description: Path to an accepted trust anchor certificate file (DoD)
     type: Hash
@@ -426,37 +402,37 @@ inputs:
       issuer_dn: '/C=US/O=U.S. Government/OU=DoD/OU=PKI/CN=DoD Root CA 3'
       subject_dn: '/C=US/O=U.S. Government/OU=DoD/OU=PKI/CN=DoD Root CA 3'
 
-  # SV-258054
+  # SV-281194
   - name: unsuccessful_attempts
     description: Maximum number of unsuccessful attempts before lockout
     type: Numeric
     value: 3
 
-  # SV-258023, SV-258068
+  # SV-281278, SV-281295
   - name: system_inactivity_timeout
     description: Maximum system inactivity timeout (time in seconds).
     type: Numeric
     value: 600
 
-  # SV-258049
+  # SV-281175
   - name: days_of_inactivity
     description: Maximum number of days if account inactivity before account lockout
     type: Numeric
     value: 35
 
-  # SV-258047
+  # SV-281173
   - name: temporary_accounts
     description: Temporary user accounts
     type: Array
     value: []
 
-  # SV-258047
+  # SV-281173
   - name: temporary_account_max_days
     description: Max number of days a temporary account should be permitted to exist
     type: Numeric
     value: 3
 
-  # SV-257779
+  # SV-281227
   - name: banner_message_text_cli
     description: Banner message text for command line interface logins.
     type: String
@@ -480,7 +456,7 @@ inputs:
       communications and work product are private and confidential. See User \
       Agreement for details."
 
-  # SV-257981
+  # SV-281224
   - name: banner_message_text_ral
     description: Banner message text for remote access logins.
     type: String
@@ -504,7 +480,7 @@ inputs:
       communications and work product are private and confidential. See User \
       Agreement for details."
 
-  # SV-270174
+  # SV-281225
   - name: banner_message_text_gui
     description: Banner message text for graphical user interface logins.
     type: String
@@ -529,113 +505,61 @@ inputs:
       Agreement for details."
 
 
-  # SV-258056
+  # SV-281196
   - name: fail_interval
     description: Interval of time in which the consecutive failed logon attempts must occur in order for the account to be locked out (time in seconds)
     type: Numeric
     value: 900
 
-  # SV-258057
+  # SV-281197
   - name: lockout_time
     description: Minimum amount of time account must be locked out after failed logins. '0' indicates an account should not unlock until reset by an admin.
     type: Numeric
     value: 0
 
-  # SV-258066
-  - name: system_activity_timeout
-    description: The expected maximum delay in seconds before the system will lock the session
-    type: Numeric
-    value: 600
-
-  # SV-258060
+  # SV-281198
   - name: log_directory
     description: Documented tally log directory
     type: String
     value: /var/log/faillock
 
-  # SV-257995
+  # SV-281269
   - name: sshd_client_alive_count_max
     description: all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity
     type: Numeric
     value: 1
 
-  # SV-257780
-  - name: linux_threat_prevention_package
-    description: Endpoint Security Linux Threat Prevention Tool Package
-    type: String
-    value: mcafeetp
-
-  # SV-257780
-  - name: linux_threat_prevention_service
-    description: Endpoint Security Linux Threat Prevention Tool Service
-    type: String
-    value: mfetpd
-
-  # SV-257837
-  - name: remove_xorg_x11_server_packages
-    description: Graphical Display Manager must not be installed
-    type: Array
-    value:
-      - xorg-x11-server-common
-      - xorg-x11-server-Xorg
-      - xorg-x11-server-utils
-      - xorg-x11-server-Xwayland
-
-  # SV-257781, SV-257837
+  # SV-281297
   - name: gui_required
     description: Set to true if there is a documented requirement for the target system to have a graphical user interface enabled
     type: Boolean
     value: false
 
-  # SV-258153
-  - name: disk_error_action
-    description: Must take appropriate action when an audit processing failure occurs.
-    type: Array
-    value:
-      - SYSLOG
-      - SINGLE
-      - HALT
-
-  # SV-258154
-  - name: disk_full_action
-    description: Audit system must take appropriate action when the audit storage volume is full.
-    type: Array
-    value:
-      - SYSLOG
-      - SINGLE
-      - HALT
-
-  # SV-258158, SV-258159
+  # SV-281107
   - name: admin_space_left
     description: The percentage of space left on the audit storage volume that will trigger the system to take action
     type: String
     value: "5%"
 
-  # SV-258159
+  # SV-281108
   - name: admin_space_left_action
     description: Action the system should take when the audit storage volume is full
     type: String
     value: "SINGLE"
 
-  # SV-258160
-  - name: max_log_file_action
-    description: Action the system should take when the audit files have reached maximum size
-    type: String
-    value: "ROTATE"
-
-  # SV-258168
+  # SV-281111
   - name: audit_flush_threshold
     description: Threshold at which the audit system should flush the audit logs to disk
     type: Numeric
     value: 100
 
-  # SV-257985
+  # SV-281265
   - name: permit_root_login
     description: Whether to permit direct logons to the root account using remote access via SSH
     type: String
     value: "no"
 
-  # SV-258044, SV-258072, SV-258073, SV-258074, SV-258075
+  # SV-281079, SV-281080, SV-281081, SV-281082, SV-281083
   - name: modes_for_shells
     description: Define default modes for logon and non-logon shells.
     type: Hash
@@ -645,13 +569,13 @@ inputs:
       cshrc_umask: "077"
       profile_umask: "077"
 
-  # SV-257883
+  # SV-281059
   - name: mode_for_libs
     description: Define default mode for system libraries
     type: String
     value: "0755"
 
-  # SV-257883, SV-257884, SV-257920, SV-257921, SV-257922, SV-257923
+  # SV-281039, SV-281040, SV-281041, SV-281042, SV-281059, SV-281060
   - name: system_libraries
     description: Define system libraries which should have strict permissions enforced
     type: Array
@@ -661,7 +585,7 @@ inputs:
       - /usr/lib
       - /usr/lib64
 
-  # SV-257882, SV-257918, SV-257919
+  # SV-281037, SV-281038, SV-281058
   - name: system_command_dirs
     description: Directories containing system command executables
     type: Array
@@ -674,10 +598,10 @@ inputs:
       - /usr/local/bin
       - /usr/local/sbin
 
-  # SV-257887, SV-257924, SV-257925, SV-258137
+  # SV-281094
   - name: audit_tools
     description: Paths to tools related to audit function
-    tpye: Array
+    type: Array
     value:
       - /sbin/auditctl
       - /sbin/aureport
@@ -687,40 +611,40 @@ inputs:
       - /sbin/rsyslogd
       - /sbin/augenrules
 
-  # SV-257923
+  # SV-281038, SV-281040, SV-281042
   - name: required_system_accounts
     description: List of system accounts permitted to group-own system libraries
     type: Array
     value:
       - root
 
-  # SV-257917
+  # SV-281036
   - name: var_log_messages_group
     description: Group owner of /var/log/messages file
     type: Array
     value:
       - root
 
-  # SV-258123
+  # SV-281325
   - name: sssd_certificate_verification
     description: Certificate status checking for multifactor authentication.
     type: String
     value: "ocsp_dgst=sha1"
 
-  # SV-258165
+  # SV-281050, SV-281053
   - name: var_log_audit_group
     description: Group owner of /var/log/audit/audit.log
     type: Array
     value:
       - root
 
-  #  SV-258089, SV-258090
+  # SV-280969, SV-280970
   - name: use_fapolicyd
     description: Whether to use fapolicyd, similar to SELinux whitelisting
     type: Boolean
     value: true
 
-  # SV-258092, SV-258093, SV-258094, SV-258095, SV-258097, SV-258098, SV-258099, SV-258100, SV-258122, SV-258233
+  # SV-281200, SV-281212, SV-281214, SV-281215, SV-281217, SV-281218, SV-281219, SV-281220, SV-281324
   - name: pam_auth_files
     description: The pam.d auth paths
     type: Hash
@@ -729,19 +653,19 @@ inputs:
       password-auth: /etc/pam.d/password-auth
       smartcard-auth: /etc/pam.d/smartcard-auth
 
-  # SV-258056
+  # SV-281196
   - name: security_faillock_conf
     description: The security faillock configuration file
     type: String
     value: /etc/security/faillock.conf
 
-  # SV-257936
+  # SV-280956
   - name: external_firewall
     description: "The system use an external firewall or service vs a local firewall service"
     type: Boolean
     value: false
 
-  # SV-257940
+  # SV-281332, SV-281333
   - name: firewalld_properties
     description: Ports, Protocols and Services Rules
     type: Hash
@@ -754,48 +678,40 @@ inputs:
         - dhcpv6-client
         - ssh
 
-  # SV-257866, SV-257867, SV-257868, SV-257869
+  # SV-281238, SV-281239, SV-281240, SV-281241
   - name: mount_tmp_options
-    description: rhel_08_04012[3-5] - RHEL 9 must mount /tmp with the (nodev|nosuid|noexec) option.
-    type: Hash
-    value:
-      nodev: false
-      nosuid: false
-      noexec: false
-      
-  - name: mount_var_options
-    description: rhel_09_231140 - RHEL 9 must mount /var with the (nodev|nosuid|noexec) option.
+    description: Required mount options for /tmp and /var.
     type: Hash
     value:
       nodev: true
       nosuid: true
       noexec: true
 
-  # SV-258080
+  # SV-281252
   - name: non_default_tally_dir
     description: The directory used by pam_faillock
     type: String
     value: /var/log/faillock
 
-  # SV-258120
+  # SV-281201
   - name: users_allowed_blank_passwords
     description: Users allowed to not have a password set
     type: Array
     value: []
 
-  # SV-257842
+  # SV-280954
   - name: mail_package
     description: Command that is used to send email messages
     type: String
     value: s-nail
 
-  # SV-257819
+  # SV-280931
   - name: rpm_gpg_file
     description: Red Hat uses GPG keys labels defined in file
     type: String
     value: /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
-  # SV-257819
+  # SV-280931
   - name: rpm_gpg_keys
     description: Red Hat uses GPG keys labels with matching fingerprints
     type: Hash
@@ -803,25 +719,19 @@ inputs:
       "release key 2": "567E 347A D004 4ADE 55BA  8A5F 199E 2F91 FD43 1D51"
       "auxiliary key": "7E46 2425 8C40 6535 D56D  6F13 5054 E4A4 5A63 40B3"
 
-  # SV-258077
-  - name: stop_idle_session_sec
-    description: Number of seconds the system can be idle before session timeout
-    type: Numeric
-    value: 600
-
-  # SV-258071
+  # SV-281179
   - name: login_prompt_delay
     description: Delay in seconds before the login prompt is displayed again after a failed login attempt
     type: Numeric
     value: 4
 
-  # SV-258143
+  # SV-280986
   - name: is_log_aggregation_server
     description: Set to true if the target system is intended to be a log aggregation server
     type: Boolean
     value: false
 
-  #  SV-258146, SV-258147, SV-258149, SV-258150
+  # SV-280985, SV-280987, SV-280988, SV-280989, SV-280991
   - name: logging_conf_files
     description: Configuration files for the logging service
     type: Array
@@ -829,49 +739,49 @@ inputs:
       - /etc/rsyslog.conf
       - /etc/rsyslog.d/*.conf
 
-  # SV-258140, SV-258141, SV-258146, SV-258147, SV-258149, SV-258156, SV-258162, SV-258174
+  # SV-280998
   - name: alternative_logging
     description: Flag to indicate that a non-standard logging method is in use (instead of auditd and other built-in OS logging features)
     type: Boolean
     value: false
 
-  # SV-257838, SV-258140, SV-258141, SV-258146, SV-258147, SV-258149, SV-258156, SV-258162
+  # SV-280983, SV-280985, SV-280987, SV-280988, SV-280992, SV-281104, SV-281109
   - name: alternative_logging_method
     description: Alternative tool for logging (instead of auditd and other built-in OS logging features) - leave blank if using default OS tools
     type: String
     value: ""
 
-  # SV-258156
+  # SV-281104
   - name: audit_storage_threshold
     description: The percentage threshold of space remaining in the audit storage volume before the system should take action
     type: Numeric
     value: 25
 
-  # SV-257849
+  # SV-281323
   - name: autofs_required
     description: Set to true if there is a documented requirement for the target system to have autofs enabled
     type: Boolean
     value: false
 
-  # SV-258034
+  # SV-281288
   - name: usb_storage_required
     description: Set to true if there is a documented requirement for the target system to use USB storage
     type: Boolean
     value: false
 
-  # SV-257835
+  # SV-280947, SV-280949, SV-281363
   - name: tftp_required
     description: Set to true if there is a documented requirement for the target system to use TFTP
     type: Boolean
     value: false
 
-  # SV-257826, SV-257835
+  # SV-280951
   - name: ftp_required
     description: Set to true if there is a documented requirement for the target system to use FTP
     type: Boolean
     value: false
 
-  # SV-257832
+  # SV-280945
   - name: gssproxy_required
     description: Set to true if there is a documented requirement for the target system to use gss_proxy
     type: Boolean
@@ -883,13 +793,7 @@ inputs:
     type: Boolean
     value: false
 
-  # SV-257833
-  - name: iprutils_required
-    description: Set to true if there is a documented requirement for the target system to use iprutils
-    type: Boolean
-    value: false
-
-  # SV-257834
+  # SV-280946
   - name: tuned_required
     description: Set to true if there is a documented requirement for the target system to use tuned
     type: Boolean
@@ -901,31 +805,25 @@ inputs:
     type: Boolean
     value: false
 
-  # SV-258004
+  # SV-281255
   - name: kerberos_required
     description: Set to true if there is a documented requirement for the target system to use Kerberos auth
     type: Boolean
     value: false
-  
-    # SV-257954
+
+  # SV-280996
   - name: libreswan_required
     description: Set to true if there is a documented requirement for the target system to have Libreswan installed
     type: Boolean
     value: false
-  
-  # SV-257836
-  - name: quagga_required
-    description: Set to true if there is a documented requirement for the target system to use quagga
-    type: Boolean
-    value: false
 
-  # SV-257935
+  # SV-280955
   - name: alternate_firewall_tool
     description: Alternate firewall tool (other than firewalld) in use for the system - leave blank if using default OS tools
     type: String
     value: ""
 
-  # SV-258040
+  # SV-281290
   - name: wifi_hardware
     description: Set to false if there is no wireless network capability on board the system
     type: Boolean
@@ -936,7 +834,7 @@ inputs:
   # If you need to override these values, do so via adding the desired key/value to
   # the `audit_rule_keynames_overrides` input instead -- overriding `audit_rule_keynames`
   # directly will lose the values for any key you do not explictly define.
-  # SV-258176, SV-258177, SV-258178, SV-258179, SV-258180, SV-258181, SV-258182, SV-258183, SV-258184, SV-258185, SV-258186, SV-258187, SV-258188, SV-258189, SV-258190, SV-258191, SV-258192, SV-258193, SV-258194, SV-258195, SV-258196, SV-258197, SV-258198, SV-258199, SV-258200, SV-258201, SV-258202, SV-258203, SV-258204, SV-258205, SV-258206, SV-258207, SV-258208, SV-258209, SV-258210, SV-258211, SV-258212, SV-258213, SV-258214, SV-258215, SV-258216, SV-258217, SV-258218, SV-258219, SV-258220, SV-258221, SV-258222, SV-258223, SV-258224, SV-258225, SV-258226, SV-279936
+  # SV-281116, SV-281117, SV-281118, SV-281119, SV-281120, SV-281121, SV-281122, SV-281123, SV-281124, SV-281125, SV-281126, SV-281127, SV-281128, SV-281129, SV-281130, SV-281131, SV-281132, SV-281133, SV-281134, SV-281135, SV-281136, SV-281137, SV-281138, SV-281139, SV-281140, SV-281141, SV-281142, SV-281143, SV-281144, SV-281145, SV-281146, SV-281147, SV-281148, SV-281149, SV-281150, SV-281151, SV-281152, SV-281153, SV-281154, SV-281155, SV-281156, SV-281157, SV-281158, SV-281159, SV-281160, SV-281161, SV-281162, SV-281163, SV-281164, SV-281165
   - name: audit_rule_keynames
     description: The audit rules to be applied to the system
     type: Hash
@@ -1027,223 +925,199 @@ inputs:
   # {
   #   'execve': 'my_org_specific_keyname_for_auditing_execve'
   # }
-  # SV-258176, SV-258177, SV-258178, SV-258179, SV-258180, SV-258181, SV-258182, SV-258183, SV-258184, SV-258185, SV-258186, SV-258187, SV-258188, SV-258189, SV-258190, SV-258191, SV-258192, SV-258193, SV-258194, SV-258195, SV-258196, SV-258197, SV-258198, SV-258199, SV-258200, SV-258201, SV-258202, SV-258203, SV-258204, SV-258205, SV-258206, SV-258207, SV-258208, SV-258209, SV-258210, SV-258211, SV-258212, SV-258213, SV-258214, SV-258215, SV-258216, SV-258217, SV-258218, SV-258219, SV-258220, SV-258221, SV-258222, SV-258223, SV-258224, SV-258225, SV-258226, SV-279936
+  # SV-281116, SV-281117, SV-281118, SV-281119, SV-281120, SV-281121, SV-281122, SV-281123, SV-281124, SV-281125, SV-281126, SV-281127, SV-281128, SV-281129, SV-281130, SV-281131, SV-281132, SV-281133, SV-281134, SV-281135, SV-281136, SV-281137, SV-281138, SV-281139, SV-281140, SV-281141, SV-281142, SV-281143, SV-281144, SV-281145, SV-281146, SV-281147, SV-281148, SV-281149, SV-281150, SV-281151, SV-281152, SV-281153, SV-281154, SV-281155, SV-281156, SV-281157, SV-281158, SV-281159, SV-281160, SV-281161, SV-281162, SV-281163, SV-281164, SV-281165
   - name: audit_rule_keynames_overrides
     description: The audit rules to be applied to the system
     type: Hash
     value: {}
 
-  # SV-257932
+  # SV-281046
   - name: device_file_locations
     description: Directories where device files live
     type: Array
     value:
       - /dev
 
-  # SV-257932
+  # SV-281046
   - name: exempt_from_device_file_checks
     description: Full filepaths of files that are exempt from device file checks if the target host is a virtual machine
     type: Array
     value:
       - /dev/vmci
 
-  # SV-257989, SV-257991
+  # SV-281011, SV-281013
   - name: approved_openssh_server_conf
     description: Config values expected for openssh server (order matters, so these values are comma-delimited strings and not arrays)
     type: Hash
     value:
       ciphers: aes256-gcm@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr
-      macs: hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,umac-128@openssh.com,hmac-sha2-512
+      macs: hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512
 
-  # SV-257989
+  # SV-281010, SV-281012
   - name: approved_openssh_client_conf
     description: Config values expected for openssh client (order matters, so these values are comma-delimited strings and not arrays)
     type: Hash
     value:
-      ciphers: aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr
-      macs: hmac-sha2-256-etm@openssh.com,hmac-sha2-256,hmac-sha2-512-etm@openssh.com,hmac-sha2-512
+      ciphers: aes256-gcm@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr
+      macs: hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512
 
-  # SV-258099, SV-258100 
+  # SV-281218, SV-281220
   - name: password_hash_rounds
     description: Number of rounds for hashing passwords
     type: Numeric
     value: 10000
 
-  # SV-258227
+  # SV-281103
   - name: expected_panic_value
     description: Expected value for the audit.rules '-f' flag
     type: Numeric
     value: 2
 
-  # SV-258227
+  # SV-281103
   - name: high_availability_required
     description: Set to true if there is a documented requirement for the target system to have high availability (and therefore cannot panic on audit failure)
     type: Boolean
     value: false
 
-  # SV-258232
+  # SV-281014
   - name: approved_crypto_backend
     description: FIPS 140-2/140-3 approved cryptographic module conf file
     type: String
     value: /etc/crypto-policies/back-ends/libreswan.config
 
-  # SV-258173
+  # SV-281102
   - name: expected_audit_backlog_limit
     description: Expected value for the audit backlog limit
     type: Numeric
     value: 8192
 
-  # SV-257968, SV-257969
+  # SV-281351, SV-281352
   - name: send_redirects
     description: Set to true if there is a requirement for this system to be able to send redirects that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257970, SV-257974
+  # SV-281353, SV-281357
   - name: packet_forwarding_enabled
     description: Set to true if there is a requirement for this system to be able forward packets that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257792
+  # SV-281301
   - name: vsyscall_required
     description: Set to true if there is a requirement for this system to allow virtual system calls that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257803
+  # SV-281311, SV-281318
   - name: storing_core_dumps_required
     description: Set to true if there is a requirement for this system to store core dumps that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257812
+  # SV-281317, SV-281319, SV-281320
   - name: core_dumps_required
     description: Set to true if there is a requirement for this system to enable core dumps that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257804
-  - name: atm_required
-    description: Set to true if there is a requirement for this system to enable the Asynchronous Transfer Mode kernel module that is documented with the ISSO
-    type: Boolean
-    value: false
-
-  # SV-257805
+  # SV-281312
   - name: can_required
     description: Set to true if there is a requirement for this system to enable the Controller Area Network kernel module that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257806
-  - name: firewire_required
-    description: Set to true if there is a requirement for this system to enable the FireWire kernel module that is documented with the ISSO
-    type: Boolean
-    value: false
-
-  # SV-257807
+  # SV-281313
   - name: sctp_required
     description: Set to true if there is a requirement for this system to enable the Stream Control Transmission Protocol (SCTP) kernel module that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257808
+  # SV-281314
   - name: tipc_required
     description: Set to true if there is a requirement for this system to enable the Transparent Inter Process Communication (TIPC) kernel module that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257880
-  - name: cramfs_required
-    description: Set to true if there is a requirement for this system to enable the Compressed ROM/RAM file system (cramfs) that is documented with the ISSO
-    type: Boolean
-    value: false
-
-  # SV-258039
+  # SV-281289
   - name: bluetooth_required
     description: Set to true if there is a requirement for this system to enable Bluetooth that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257971, SV-257975
+  # SV-281354, SV-281358
   - name: accept_ra_required
     description: Set to true if there is a requirement for this system to accept router advertisements that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-258007
+  # SV-281258
   - name: x11_forwarding_required
     description: Set to true if there is a requirement for this system to enable X11 forwarding that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-258014
+  # SV-281291
   - name: gui_automount_required
     description: Set to true if there is a requirement for this system to enable graphical user interface automount function that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-258014
+  # SV-281292
   - name: gui_autorun_required
     description: Set to true if there is a requirement for this system to enable graphical user interface autorun function that is documented with the ISSO
     type: Boolean
     value: false
 
-  # SV-257941
+  # SV-281334
   - name: promiscuous_mode_permitted
     description: Set to true if Promiscuous Mode is Permitted.
     type: Boolean
     value: false
 
-  # SV-258056
+  # SV-281196
   - name: centralized_account_mgmt
     description: Set to true if using a centralized account management method
     type: Boolean
     value: false
 
-  # SV-258233
+  # SV-281217, SV-281219
   - name: pam_config_included
     description: Set to true if the required PAM configuration is present in a file included or substacked from the system-auth file
     type: Boolean
     value: false
     
-  # SV-257948
+  # SV-281338
   - name: ha_cloud_dns
     description: Set to true if the system runs in a cloud platform that provides a single, highly available IP address for DNS configuration
     type: Boolean
     value: false
 
-  # SV-257949
+  # SV-281362
   - name: alt_dns_resolver
     description: Set to true if the system uses a DNS resolver other than NetworkManager and the configuration is documented and approved by the ISSO
     type: Boolean
     value: false
 
-  # SV-257816
-  - name: user_namespaces_documented
-    description: Set to true if the use of user namespaces is operationally required and documented/approved by the ISSM
-    type: Boolean
-    value: false
-
-  # SV-257879
+  # SV-280935
   - name: luks_exceptions
     description: List of block devices/partitions that are permitted to be unencrypted
     type: Array
     value: []
 
-  # SV-257862
+  # SV-281234
   - name: boot_efi_mountpoint
     description: Mount point for the EFI System Partition
     type: String
     value: '/boot/efi'
   
-  # SV-258236
+  # SV-281016
   - name: crypto_policy_waived
     description: There is an operational need to use a subpolicy that causes the links to the crypto backends to break and an exception has been made by the AO.
     type: Boolean
     value: false
 
-  # SV-272488
+  # SV-280997
   - name: alt_audit_notification_system
     description: There is another system/service to send audit failure notifications to the administrator/ISSO
     type: Boolean

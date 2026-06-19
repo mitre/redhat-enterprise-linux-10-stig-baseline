@@ -36,8 +36,36 @@ retry = 3'
     !%w[docker podman kubepods lxc].include?(virtualization.system)
   end
 
-  describe 'System pwquality setting' do
-    subject { parse_config(command('grep -rh retry /etc/security/pwquality.conf*').stdout.strip) }
-    its('retry') { should cmp >= input('min_retry') }
+  setting = 'retry'
+  expected_value = input('min_retry')
+
+  describe 'pwquality.conf settings' do
+    let(:config_files) do
+      ['/etc/security/pwquality.conf'] +
+        command("find /etc/security/pwquality.conf.d -maxdepth 1 -type f -name '*.conf' | sort").stdout.lines.map(&:strip)
+    end
+
+    let(:setting_value) do
+      config_files.flat_map do |path|
+        next [] unless file(path).file?
+
+        config = parse_config_file(path, multiple_values: true)
+        value = config.params[setting]
+        value.is_a?(Integer) ? [value] : Array(value)
+      end
+    end
+
+    it "has `#{setting}` set" do
+      expect(setting_value).not_to be_empty, "#{setting} is not set in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "only sets `#{setting}` once" do
+      expect(setting_value.length).to eq(1), "#{setting} is set more than once in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "sets `#{setting}` to greater than 0 and no more than #{expected_value}" do
+      expect(setting_value.first.to_i).to be > 0, "#{setting} is set to 0 in pwquality.conf or pwquality.conf.d/*.conf"
+      expect(setting_value.first.to_i).to be <= expected_value.to_i, "#{setting} is set to more than #{expected_value} in pwquality.conf or pwquality.conf.d/*.conf"
+    end
   end
 end

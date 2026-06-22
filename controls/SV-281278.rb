@@ -42,6 +42,7 @@ $ sudo dconf update'
 
   if package('gnome-desktop3').installed?
     describe command("gsettings get org.gnome.desktop.session idle-delay | cut -d ' ' -f2") do
+      its('stdout.strip') { should cmp > 0 }
       its('stdout.strip') { should cmp <= input('system_inactivity_timeout') }
     end
   else

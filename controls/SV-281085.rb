@@ -33,7 +33,7 @@ $ sudo systemctl restart sshd.service'
   }
 
   ssh_host_key_dirs = input('ssh_host_key_dirs').join(' ')
-  priv_keys = command("find #{ssh_host_key_dirs} -xdev -name '*.pem'").stdout.split("\n")
+  priv_keys = command("find #{ssh_host_key_dirs} -xdev -name '*_key'").stdout.split("\n")
   mode = input('ssh_private_key_mode')
   failing_keys = priv_keys.select { |key| file(key).more_permissive_than?(mode) }
 

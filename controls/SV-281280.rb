@@ -49,8 +49,8 @@ $ sudo dconf update'
       skip 'A GUI desktop is not installed; this control is Not Applicable.'
     end
   else
-    describe command('gsettings get org.gnome.desktop.screensaver lock-delay') do
-      its('stdout.strip') { should match(/uint32\s[0-5]/) }
+    describe command("gsettings get org.gnome.desktop.screensaver lock-delay | cut -d ' ' -f2") do
+      its('stdout.strip') { should cmp <= input('lock_delay') }
     end
   end
 end

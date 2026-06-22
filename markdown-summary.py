@@ -6,8 +6,8 @@ import sys
 ## Example input data
 # [
 #     {
-#         "profileName": "redhat-enterprise-linux-8-stig-baseline",
-#         "resultSets": ["rhel-8_hardened.json"],
+#         "profileName": "redhat-enterprise-linux-10-stig-baseline",
+#         "resultSets": ["rhel-10_hardened.json"],
 #         "compliance": 66,
 #         "passed": {"critical": 0, "high": 11, "medium": 208, "low": 8, "total": 227},
 #         "failed": {"critical": 0, "high": 6, "medium": 87, "low": 19, "total": 112},
@@ -19,8 +19,8 @@ import sys
 
 ## Desired output Table
 
-# # redhat-enterprise-linux-8-stig-baseline
-# ## Result Sets: rhel-8_hardened.json
+# # redhat-enterprise-linux-10-stig-baseline
+# ## Result Sets: rhel-10_hardened.json
 
 # |                  | Compliance (%) | Passed | Failed | Not Reviewed | Not Applicable | Error |
 # | ---------------- | -------------- | ------ | ------ | ------------ | -------------- | ----- |

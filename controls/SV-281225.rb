@@ -70,5 +70,15 @@ $ sudo dconf update)
       subject { output }
       it { should cmp 'true' }
     end
+
+    banner = command('gsettings get org.gnome.login-screen banner-message-text').stdout.strip
+    banner = banner.sub(/\A'/, '').sub(/'\z/, '').gsub(/\\n/, '').gsub(/[\r\n\s]/, '')
+    expected_banner = input('banner_message_text_gui').gsub(/[\r\n\s]/, '')
+
+    describe 'The GUI login banner' do
+      it 'is set to the standard banner and has the correct text' do
+        expect(banner).to eq(expected_banner), 'Banner does not match expected text'
+      end
+    end
   end
 end

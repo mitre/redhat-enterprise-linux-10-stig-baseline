@@ -49,6 +49,8 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-001133', 'CCI-002361', 'CCI-002891']
   tag nist: ['SC-10', 'AC-12', 'MA-4 (7)']
+  tag 'host'
+  tag 'container-conditional'
 
   setting = 'ClientAliveInterval'
   gssapi_authentication = input('sshd_config_values')

@@ -34,6 +34,7 @@ $ sudo grubby --update-kernel=ALL --remove-args=noexec'
   tag 'documentable'
   tag cci: ['CCI-002824']
   tag nist: ['SI-16']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

@@ -35,6 +35,8 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-001813']
   tag nist: ['CM-5 (1) (a)']
+  tag 'host'
+  tag 'container-conditional'
 
   setting = 'GSSAPIAuthentication'
   gssapi_authentication = input('sshd_config_values')

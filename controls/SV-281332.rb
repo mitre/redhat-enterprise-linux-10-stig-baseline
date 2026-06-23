@@ -35,6 +35,7 @@ $ sudo firewall-cmd --permanent --add-service=service_name'
   tag 'documentable'
   tag cci: ['CCI-000382', 'CCI-002314']
   tag nist: ['CM-7 b', 'AC-17 (1)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

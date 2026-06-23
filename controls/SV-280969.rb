@@ -33,6 +33,7 @@ $ sudo dnf -y install fapolicyd'
   tag 'documentable'
   tag cci: ['CCI-001774', 'CCI-001764']
   tag nist: ['CM-7 (5) (b)', 'CM-7 (2)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

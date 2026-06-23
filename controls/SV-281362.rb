@@ -40,6 +40,8 @@ $ sudo systemctl reload NetworkManager'
   tag 'documentable'
   tag cci: ['CCI-002385', 'CCI-001115']
   tag nist: ['SC-5 a', 'SC-7 (9)']
+  tag 'host'
+  tag 'container'
 
   only_if('Alternate DNS resolver is documented and ISSO-approved; this control is Not Applicable', impact: 0.0) {
     !input('alt_dns_resolver')

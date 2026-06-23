@@ -21,6 +21,8 @@ $ sudo chown root /etc/passwd-'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   describe file('/etc/passwd-') do
     it { should exist }

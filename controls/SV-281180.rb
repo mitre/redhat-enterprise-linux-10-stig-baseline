@@ -27,6 +27,8 @@ PASS_MIN_DAYS 1'
   tag 'documentable'
   tag cci: ['CCI-004066']
   tag nist: ['IA-5 (1) (h)']
+  tag 'host'
+  tag 'container'
 
   value = input('pass_min_days')
   setting = input_object('pass_min_days').name.upcase

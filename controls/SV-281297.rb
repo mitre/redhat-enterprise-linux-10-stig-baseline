@@ -21,6 +21,7 @@ $ sudo systemctl set-default multi-user.target'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+  tag 'host'
 
   only_if('This requirement is Not Applicable inside the container', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

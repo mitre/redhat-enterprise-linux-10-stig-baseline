@@ -39,6 +39,7 @@ $ sudo dconf update'
   tag 'documentable'
   tag cci: ['CCI-000778', 'CCI-001958']
   tag nist: ['IA-3', 'IA-3']
+  tag 'host'
 
   only_if('This requirement is Not Applicable in the container', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

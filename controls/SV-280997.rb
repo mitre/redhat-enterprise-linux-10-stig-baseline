@@ -28,6 +28,8 @@ $ sudo dnf -y install postfix'
   tag 'documentable'
   tag cci: ['CCI-000139']
   tag nist: ['AU-5 a']
+  tag 'host'
+  tag 'container'
 
   only_if('Alternate system for audit notifications exist, this control is not applicable', impact: 0.0) {
     !input('alt_audit_notification_system')

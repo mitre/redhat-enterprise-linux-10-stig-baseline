@@ -28,6 +28,7 @@ $ sudo systemctl enable --now auditd'
   tag 'documentable'
   tag cci: ['CCI-000169', 'CCI-000130', 'CCI-000131', 'CCI-000132', 'CCI-000133', 'CCI-000134', 'CCI-000135', 'CCI-000154', 'CCI-000158', 'CCI-001876', 'CCI-001464', 'CCI-001487', 'CCI-001914', 'CCI-001875', 'CCI-001877', 'CCI-001878', 'CCI-001879', 'CCI-001880', 'CCI-001881', 'CCI-001882', 'CCI-001889', 'CCI-003938', 'CCI-002884', 'CCI-000172']
   tag nist: ['AU-12 a', 'AU-3 a', 'AU-3 b', 'AU-3 c', 'AU-3 d', 'AU-3 e', 'AU-3 (1)', 'AU-6 (4)', 'AU-7 (1)', 'AU-7 a', 'AU-14 (1)', 'AU-3 f', 'AU-12 (3)', 'AU-7 a', 'AU-7 a', 'AU-7 a', 'AU-7 a', 'AU-7 a', 'AU-7 b', 'AU-7 b', 'AU-8 b', 'CM-5 (1) (b)', 'MA-4 (1) (a)', 'AU-12 c']
+  tag 'host'
 
   only_if('This requirement is Not Applicable in the container', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

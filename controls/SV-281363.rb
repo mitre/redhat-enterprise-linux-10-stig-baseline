@@ -42,6 +42,8 @@ $ sudo systemctl restart tftp.service'
   tag 'documentable'
   tag cci: ['CCI-000197']
   tag nist: ['IA-5 (1) (c)']
+  tag 'host'
+  tag 'container'
 
   if input('tftp_required')
     describe package('tftp-server') do

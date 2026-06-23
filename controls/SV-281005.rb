@@ -27,6 +27,7 @@ $ sudo dnf -y install pkcs11-provider'
   tag 'documentable'
   tag cci: ['CCI-000765', 'CCI-004046', 'CCI-001954']
   tag nist: ['IA-2 (1)', 'IA-2 (6) (a)', 'IA-2 (12)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

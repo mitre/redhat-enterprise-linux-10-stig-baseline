@@ -24,6 +24,8 @@ $ sudo chgrp root [FILE]'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+  tag 'host'
+  tag 'container'
 
   required_system_account_caveats = input('required_system_accounts').map { |acct| "-group #{acct}" }.join(' ')
 

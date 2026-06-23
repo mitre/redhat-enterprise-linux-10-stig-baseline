@@ -23,6 +23,7 @@ $ sudo dnf -y install sudo'
   tag cci: ['CCI-002235']
   tag nist: ['AC-6 (10)']
   tag 'host'
+  tag 'container-conditional'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?

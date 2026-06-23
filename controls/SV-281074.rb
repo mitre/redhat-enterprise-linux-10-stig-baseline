@@ -22,6 +22,8 @@ $ sudo chgrp <group> <file>'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   if input('disable_slow_controls')
     describe 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute.' do

@@ -31,6 +31,8 @@ minlen = 15'
   tag 'documentable'
   tag cci: ['CCI-004066']
   tag nist: ['IA-5 (1) (h)']
+  tag 'host'
+  tag 'container'
 
   setting = 'minlen'
   expected_value = input('pass_min_len')

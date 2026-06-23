@@ -22,6 +22,8 @@ $ sudo chmod 0755 <file>'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+  tag 'host'
+  tag 'container'
 
   if input('disable_slow_controls')
     describe 'This control consistently takes a long to run and has been disabled using the disable_slow_controls attribute.' do

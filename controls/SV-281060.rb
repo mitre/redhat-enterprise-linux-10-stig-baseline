@@ -22,6 +22,8 @@ $ sudo chmod 755 [FILE]'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+  tag 'host'
+  tag 'container'
 
   failing_files = command("find -L #{input('system_libraries').join(' ')} -perm /0022 -name '*.so*' -type f -exec ls -d {} \\;").stdout.split("\n")
 

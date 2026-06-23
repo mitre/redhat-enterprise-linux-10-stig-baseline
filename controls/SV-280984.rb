@@ -21,6 +21,7 @@ $ sudo systemctl enable --now rsyslog'
   tag 'documentable'
   tag cci: ['CCI-000133']
   tag nist: ['AU-3 d']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

@@ -32,6 +32,7 @@ $ sudo systemctl enable --now firewalld'
   tag 'documentable'
   tag cci: ['CCI-000382', 'CCI-002314']
   tag nist: ['CM-7 b', 'AC-17 (1)']
+  tag 'host'
 
   only_if('This requirment is Not Applicable in the container, the container management platform manages the firewall service', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

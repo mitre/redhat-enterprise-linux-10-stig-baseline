@@ -27,6 +27,8 @@ $ sudo systemctl restart rsyslog.service'
   tag 'documentable'
   tag cci: ['CCI-000067']
   tag nist: ['AC-17 (1)']
+  tag 'host'
+  tag 'container-conditional'
 
   only_if('Control not applicable; remote access not configured within containerized RHEL', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?

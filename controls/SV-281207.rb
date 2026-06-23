@@ -25,6 +25,7 @@ ALL     ALL=(ALL:ALL) ALL'
   tag cci: ['CCI-000366', 'CCI-002696']
   tag nist: ['CM-6 b', 'SI-6 a']
   tag 'host'
+  tag 'container-conditional'
 
   only_if('This control is Not Applicable to containers without sudo installed', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || command('sudo').exist?

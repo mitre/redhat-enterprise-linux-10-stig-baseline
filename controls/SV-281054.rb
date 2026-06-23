@@ -49,6 +49,7 @@ $ sudo chmod 0400 $log_file.*'
   tag 'documentable'
   tag cci: ['CCI-000162', 'CCI-000163', 'CCI-000164', 'CCI-001314']
   tag nist: ['AU-9 a', 'AU-9 a', 'AU-9 a', 'SI-11 b']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

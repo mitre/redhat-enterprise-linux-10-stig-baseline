@@ -35,6 +35,8 @@ Do not perform the steps in this section on the root account. Doing so will caus
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+  tag 'host'
+  tag 'container'
 
   ignore_shells = input('non_interactive_shells').join('|')
   non_interactive_shells = passwd.where { uid.to_i < 1000 && !shell.match(ignore_shells) }.users - input('exempt_interactive_system_accounts')

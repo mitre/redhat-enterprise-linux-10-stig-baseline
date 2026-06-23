@@ -25,6 +25,7 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-000172']
   tag nist: ['AU-12 c']
+  tag 'host'
 
   audit_command = '/usr/sbin/shutdown'
 

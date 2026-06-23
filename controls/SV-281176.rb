@@ -25,6 +25,8 @@ If a local interactive user requires path variables to reference a directory own
   tag 'documentable'
   tag cci: ['CCI-003980']
   tag nist: ['CM-11 (2)']
+  tag 'host'
+  tag 'container'
 
   ignore_shells = input('non_interactive_shells').join('|')
 

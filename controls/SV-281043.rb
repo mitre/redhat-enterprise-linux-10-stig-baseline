@@ -27,6 +27,8 @@ $ sudo chown root [cron config file]'
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+  tag 'host'
+  tag 'container'
 
   failing_crontabs = command('find /etc/cron* ! -user root -print0').stdout.split("\0")
 

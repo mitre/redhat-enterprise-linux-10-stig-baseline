@@ -36,6 +36,7 @@ $ sudo sysctl --system'
   tag 'documentable'
   tag cci: ['CCI-002165', 'CCI-002235']
   tag nist: ['AC-3 (4)', 'AC-6 (10)']
+  tag 'host'
 
   only_if('Control not applicable within a container', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

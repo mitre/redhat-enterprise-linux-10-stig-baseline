@@ -38,6 +38,7 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-002233', 'CCI-002234', 'CCI-004188']
   tag nist: ['AC-6 (8)', 'AC-6 (9)', 'MA-3 (5)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

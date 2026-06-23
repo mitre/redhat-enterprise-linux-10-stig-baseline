@@ -75,6 +75,7 @@ AIDE found NO differences between database and filesystem. Looks okay!!
   tag 'documentable'
   tag cci: ['CCI-002696']
   tag nist: ['SI-6 a']
+  tag 'host'
 
   file_integrity_tool = input('file_integrity_tool')
 

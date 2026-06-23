@@ -21,6 +21,8 @@ $ sudo chgrp root /etc/shadow'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   describe file('/etc/shadow') do
     it { should exist }

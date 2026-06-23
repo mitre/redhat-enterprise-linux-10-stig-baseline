@@ -21,6 +21,8 @@ $ sudo chgrp root /etc/gshadow-'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   describe file('/etc/gshadow-') do
     it { should exist }

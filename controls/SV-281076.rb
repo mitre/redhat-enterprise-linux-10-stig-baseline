@@ -23,6 +23,8 @@ $ sudo chmod 0000 /etc/shadow'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   system_file = '/etc/shadow'
 

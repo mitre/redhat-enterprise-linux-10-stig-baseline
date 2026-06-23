@@ -20,6 +20,8 @@ $ sudo passwd -n 1 [user]'
   tag 'documentable'
   tag cci: ['CCI-004066']
   tag nist: ['IA-5 (1) (h)']
+  tag 'host'
+  tag 'container'
 
   # TODO: add inputs for a frequecny
 

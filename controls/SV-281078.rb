@@ -35,6 +35,7 @@ Replace "[audit_tool]" with each audit tool not group-owned by "root".'
   tag 'documentable'
   tag cci: ['CCI-001493', 'CCI-001494', 'CCI-001495']
   tag nist: ['AU-9 a', 'AU-9', 'AU-9']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

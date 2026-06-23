@@ -32,6 +32,7 @@ $ systemctl enable --now fapolicyd'
   tag 'documentable'
   tag cci: ['CCI-001774', 'CCI-001764']
   tag nist: ['CM-7 (5) (b)', 'CM-7 (2)']
+  tag 'host'
 
   if %w[docker podman kubepods lxc].include?(virtualization.system)
     impact 0.0

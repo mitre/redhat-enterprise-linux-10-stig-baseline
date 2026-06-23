@@ -34,6 +34,7 @@ Reboot the system for the settings to take effect.'
   tag 'documentable'
   tag cci: ['CCI-000381', 'CCI-001443']
   tag nist: ['CM-7 a', 'AC-18 (1)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

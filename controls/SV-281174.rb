@@ -22,6 +22,8 @@ Edit the file "/etc/passwd" and ensure that every user's GID is a valid GID.)
   tag 'documentable'
   tag cci: ['CCI-000764']
   tag nist: ['IA-2']
+  tag 'host'
+  tag 'container'
 
   ignore_shells = input('non_interactive_shells').join('|')
   interactive_users = passwd.where { uid.to_i >= 1000 && !shell.match(ignore_shells) }.users

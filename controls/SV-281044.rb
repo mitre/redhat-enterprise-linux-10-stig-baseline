@@ -27,6 +27,8 @@ $ sudo chgrp root [cron config file]'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
 
   crontabs = command('stat -c "%U %n" /etc/cron*').stdout.split("\n")
 

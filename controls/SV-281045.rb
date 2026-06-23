@@ -24,6 +24,8 @@ $ sudo chown [root or system account] [Public Directory]'
   tag 'documentable'
   tag cci: ['CCI-001090']
   tag nist: ['SC-4']
+  tag 'host'
+  tag 'container'
 
   partitions = etc_fstab.params.map { |partition| partition['mount_point'] }.uniq
 

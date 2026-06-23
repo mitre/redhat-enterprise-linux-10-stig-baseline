@@ -40,6 +40,7 @@ Created symlink '/etc/systemd/system/kdump.service' ? '/dev/null'."
   tag 'documentable'
   tag cci: ['CCI-001665']
   tag nist: ['SC-24']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

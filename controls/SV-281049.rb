@@ -35,6 +35,7 @@ $ sudo chgrp users /home/disauser)
   tag 'documentable'
   tag cci: ['CCI-000213', 'CCI-002385']
   tag nist: ['AC-3', 'SC-5 a']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

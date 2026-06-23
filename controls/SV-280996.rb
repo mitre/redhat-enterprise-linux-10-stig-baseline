@@ -24,6 +24,8 @@ $ sudo dnf -y install libreswan'
   tag 'documentable'
   tag cci: ['CCI-000803']
   tag nist: ['IA-7']
+  tag 'host'
+  tag 'container'
 
   if input('libreswan_required')
     describe package('libreswan') do

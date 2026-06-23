@@ -20,6 +20,7 @@ If a separate entry for "/home" is not in use, this is a finding.'
   tag 'documentable'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5 a']
+  tag 'host'
 
   only_if('This requirement is Not Applicable inside a container; the host manages the container filesystem') {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

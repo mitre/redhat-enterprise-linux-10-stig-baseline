@@ -29,6 +29,8 @@ $ sudo dnf -y install openssh-server'
   tag 'documentable'
   tag cci: ['CCI-002418', 'CCI-002421', 'CCI-002420', 'CCI-002422']
   tag nist: ['SC-8', 'SC-8 (1)', 'SC-8 (2)', 'SC-8 (2)']
+  tag 'host'
+  tag 'container-conditional'
 
   openssh_present = package('openssh-server').installed?
 

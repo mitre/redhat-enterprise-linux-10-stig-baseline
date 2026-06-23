@@ -22,6 +22,7 @@ $ sudo dnf -y install pcsc-lite-ccid'
   tag 'documentable'
   tag cci: ['CCI-004046']
   tag nist: ['IA-2 (6) (a)']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

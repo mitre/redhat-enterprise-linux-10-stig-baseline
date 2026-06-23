@@ -25,6 +25,7 @@ Create and assign home directories to all local interactive users on RHEL 10 tha
   tag 'documentable'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5 a']
+  tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

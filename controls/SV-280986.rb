@@ -51,7 +51,6 @@ $ sudo systemctl restart rsyslog.service'
   tag cci: ['CCI-000366', 'CCI-002385']
   tag nist: ['CM-6 b', 'SC-5 a']
   tag 'host'
-  tag 'container'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system)

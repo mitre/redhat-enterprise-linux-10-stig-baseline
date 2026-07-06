@@ -56,9 +56,13 @@ $ sudo service auditd restart'
   auditd_config = auditd_conf('/etc/audit/auditd.conf')
   log_dir = File.dirname(auditd_config.log_file)
   log_group = auditd_config.log_group
-  expected_mode = log_group.empty? || log_group == 'root' ? '0700' : '0750'
+  mode = if log_group.empty? || log_group == 'root'
+           input('expected_modes')['audit_log_dir_root_group']
+         else
+           input('expected_modes')['audit_log_dir_non_root_group']
+         end
 
   describe directory(log_dir) do
-    it { should_not be_more_permissive_than(expected_mode) }
+    it { should_not be_more_permissive_than(mode) }
   end
 end

@@ -103,13 +103,17 @@ inputs:
     type: String
     value: '0755'
 
-  # SV-281065, SV-281066, SV-281067, SV-281068, SV-281069, SV-281070, SV-281071, SV-281072, SV-281076, SV-281262, SV-281364
+  # SV-281054, SV-281055, SV-281061, SV-281062, SV-281065, SV-281066, SV-281067, SV-281068, SV-281069, SV-281070, SV-281071, SV-281072, SV-281076, SV-281084, SV-281262, SV-281364
   - name: expected_modes
     description: Expected modes of system files and/or directories
     type: Hash
     value:
       home_dirs: "0750"
       cron_dirs: "0700"
+      audit_log_file: "0600"
+      audit_log_dir_root_group: "0700"
+      audit_log_dir_non_root_group: "0750"
+      systemd_tmpfiles_root_init_files: "600"
       /etc/group: "0644"
       /etc/group-: "0644"
       /etc/gshadow: "0000"
@@ -120,6 +124,8 @@ inputs:
       /etc/shadow-: "0000"
       /etc/crontab: "0600"
       /etc/ssh/sshd_config: "0600"
+      /var/log: "0755"
+      /var/log/messages: "0640"
       auditd_conf: "0640"
 
   # SV-281064

@@ -26,8 +26,12 @@ $ sudo chmod 0755 /var/log'
   tag 'host'
   tag 'container'
 
-  describe directory('/var/log') do
+  system_file = '/var/log'
+
+  mode = input('expected_modes')[system_file]
+
+  describe directory(system_file) do
     it { should exist }
-    it { should_not be_more_permissive_than('0755') }
+    it { should_not be_more_permissive_than(mode) }
   end
 end

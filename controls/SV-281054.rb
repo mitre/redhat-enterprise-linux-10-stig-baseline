@@ -56,8 +56,9 @@ $ sudo chmod 0400 $log_file.*'
   }
 
   log_file = auditd_conf('/etc/audit/auditd.conf').log_file
+  mode = input('expected_modes')['audit_log_file']
 
   describe file(log_file) do
-    it { should_not be_more_permissive_than('0600') }
+    it { should_not be_more_permissive_than(mode) }
   end
 end

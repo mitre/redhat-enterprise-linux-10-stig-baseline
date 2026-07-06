@@ -29,11 +29,15 @@ $ sudo chmod 0640 /var/log/messages'
     !%w[docker podman kubepods lxc].include?(virtualization.system)
   }
 
+  system_file = '/var/log/messages'
+
+  mode = input('expected_modes')[system_file]
+
   describe.one do
-    describe file('/var/log/messages') do
-      it { should_not be_more_permissive_than('0640') }
+    describe file(system_file) do
+      it { should_not be_more_permissive_than(mode) }
     end
-    describe file('/var/log/messages') do
+    describe file(system_file) do
       it { should_not exist }
     end
   end

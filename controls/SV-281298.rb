@@ -31,4 +31,14 @@ $ sudo systemctl daemon-reload'
   tag 'documentable'
   tag cci: ['CCI-002235']
   tag nist: ['AC-6 (10)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe command('grep -iR CtrlAltDelBurstAction /etc/systemd/system*') do
+    its('exit_status') { should eq 0 }
+    its('stdout') { should match(/^[[:space:]]*CtrlAltDelBurstAction[[:space:]]*=[[:space:]]*none/i) }
+  end
 end

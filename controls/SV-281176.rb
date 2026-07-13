@@ -25,4 +25,58 @@ If a local interactive user requires path variables to reference a directory own
   tag 'documentable'
   tag cci: ['CCI-003980']
   tag nist: ['CM-11 (2)']
+  tag 'host'
+  tag 'container'
+
+  ignore_shells = input('non_interactive_shells').join('|')
+
+  findings = {}
+  users.where { !shell.match(ignore_shells) && (uid >= 1000 || uid.zero?) }.entries.each do |user_info|
+    next if input('exempt_home_users').include?(user_info.username.to_s)
+
+    grep_results = command("grep -i path= --exclude=\".bash_history\" #{user_info.home}/.*").stdout.split("\n")
+    grep_results.each do |result|
+      result.slice! 'PATH='
+      # Case when last value in exec search path is :
+      result += ' ' if result[-1] == ':'
+      result.slice! '$PATH:'
+      result.gsub! '="', '=' # account for cases where path is set to equal a quote-wrapped statement
+      result.gsub! '$HOME', user_info.home.to_s
+      result.gsub! '~', user_info.home.to_s
+      result.gsub! ':$PATH', '' # remove $PATH if it shows up at the end of line
+      line_arr = result.split(':')
+      line_arr.delete_at(0)
+      line_arr.each do |line|
+        line = line.strip
+
+        # Don't run test on line that exports PATH and is not commented out
+        next unless !line.start_with?('export') && !line.start_with?('#')
+
+        # Case when :: found in exec search path or : found at beginning
+        if line.strip.empty?
+          curr_work_dir = command('pwd').stdout.delete("\n")
+          line = curr_work_dir if curr_work_dir.start_with?(user_info.home.to_s) || curr_work_dir[]
+        end
+
+        # catch a leading '"'
+        line = line[1..line.length] if line.start_with?('"')
+
+        # This will fail if non-home directory found in path
+        next if line.start_with?(user_info.home)
+
+        # we want a hash of usernames as the keys and arrays of failing lines as values
+        findings[user_info.username] = if findings[user_info.username]
+                                         findings[user_info.username] << line
+                                       else
+                                         [line]
+                                       end
+      end
+    end
+  end
+
+  describe 'Initialization files' do
+    it "should not include executable search paths that include directories outside the respective user's home directory" do
+      expect(findings).to be_empty, "Users with non-homedir paths assigned to their PATH environment variable:\n\t#{findings}"
+    end
+  end
 end

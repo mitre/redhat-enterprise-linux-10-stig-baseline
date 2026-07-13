@@ -34,4 +34,20 @@ $ nmcli radio all off'
   tag 'documentable'
   tag cci: ['CCI-001444', 'CCI-001443', 'CCI-002421', 'CCI-002418']
   tag nist: ['AC-18 (1)', 'AC-18 (1)', 'SC-8 (1)', 'SC-8']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('wifi_hardware')
+    describe command('nmcli device') do
+      its('stdout.strip') { should_not match(/wifi\s*connected/) }
+    end
+  else
+    impact 0.0
+    describe 'Skip' do
+      skip 'The system does not have a wireless network adapter; this control is Not Applicable.'
+    end
+  end
 end

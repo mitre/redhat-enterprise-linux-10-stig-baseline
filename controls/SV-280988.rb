@@ -50,18 +50,12 @@ $ sudo systemctl restart rsyslog'
   }
 
   if input('alternative_logging_method') == ''
-    describe 'rsyslog configuration' do
-      subject {
-        command("grep -i '^$DefaultNetstreamDriver' #{input('logging_conf_files').join(' ')} | awk -F ':' '{ print $2 }'").stdout
-      }
-      it { should match(/\$DefaultNetstreamDriver\s+gtls/) }
-    end
+    tls_config = command("grep -iEh 'tls=\"on\"|StreamDriver\\.Mode[[:space:]]*=[[:space:]]*\"1\"' #{input('logging_conf_files').join(' ')} | grep -vE '^[[:space:]]*#'").stdout.strip
 
-    describe 'rsyslog configuration' do
-      subject {
-        command("grep -i '^$ActionSendStreamDriverMode' #{input('logging_conf_files').join(' ')} | awk -F ':' '{ print $2 }'").stdout
-      }
-      it { should match(/\$ActionSendStreamDriverMode\s+1/) }
+    describe 'rsyslog omfwd TLS configuration' do
+      it 'enables TLS for encrypted forwarding' do
+        expect(tls_config).to_not be_empty, 'No active rsyslog TLS forwarding configuration found'
+      end
     end
   else
     describe 'manual check' do

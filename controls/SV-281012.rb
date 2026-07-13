@@ -38,13 +38,26 @@ Note: Systemwide crypto policies are applied on application startup. It is recom
   tag 'documentable'
   tag cci: ['CCI-001453', 'CCI-000877']
   tag nist: ['AC-17 (2)', 'MA-4 c']
+  tag 'host'
+  tag 'container-conditional'
 
   only_if('Control not applicable - SSH is not installed within containerized RHEL', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?
   }
 
+  approved_macs = input('approved_openssh_client_conf')['macs']
+
   describe file('/etc/crypto-policies/back-ends/openssh.config') do
     it { should exist }
-    its('content') { should match(/^MACs\s+hmac-sha2-256-etm@openssh\.com,hmac-sha2-512-etm@openssh\.com,hmac-sha2-256,hmac-sha2-512$/) }
+  end
+
+  options = { assignment_regex: /^(\S+)\s+(.+)$/ }
+  openssh_conf = parse_config_file('/etc/crypto-policies/back-ends/openssh.config', options).params.to_h { |k, v| [k.downcase, v.to_s.split(',').map(&:strip)] }
+  actual_macs = openssh_conf['macs'] || []
+
+  describe 'OpenSSH client configuration' do
+    it 'implements approved MACs' do
+      expect(actual_macs).to eq(approved_macs), "OpenSSH client MAC configuration actual value:\n\t#{actual_macs.inspect}\ndoes not match the expected value:\n\t#{approved_macs.inspect}"
+    end
   end
 end

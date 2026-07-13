@@ -33,4 +33,33 @@ C /root/.tcshrc        600 root root - /usr/share/rootfiles/.tcshrc'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
+
+  mode = input('expected_modes')['systemd_tmpfiles_root_init_files']
+  expected_tmpfiles_entries = [
+    { target: '/root/.bash_logout', source: '/usr/share/rootfiles/.bash_logout' },
+    { target: '/root/.bash_profile', source: '/usr/share/rootfiles/.bash_profile' },
+    { target: '/root/.bashrc', source: '/usr/share/rootfiles/.bashrc' },
+    { target: '/root/.cshrc', source: '/usr/share/rootfiles/.cshrc' },
+    { target: '/root/.tcshrc', source: '/usr/share/rootfiles/.tcshrc' },
+  ]
+
+  tmpfiles_lines = command('grep -h /usr/share/rootfiles/ /etc/tmpfiles.d/*.conf').stdout.lines.map(&:strip)
+  missing_entries = expected_tmpfiles_entries.reject do |entry|
+    expected_line = /
+      \AC\s+#{Regexp.escape(entry[:target])}\s+#{Regexp.escape(mode)}
+      \s+root\s+root\s+-\s+#{Regexp.escape(entry[:source])}(?:\s|$)
+    /x
+    tmpfiles_lines.any? { |line| line.match?(expected_line) }
+  end
+
+  describe 'systemd-tmpfiles root initialization file overrides' do
+    it "should configure all rootfiles entries with mode #{mode}" do
+      formatted_missing_entries = missing_entries.map do |entry|
+        "C #{entry[:target]} #{mode} root root - #{entry[:source]}"
+      end
+      expect(missing_entries).to be_empty, "Missing or incorrectly configured entries:\n\t- #{formatted_missing_entries.join("\n\t- ")}"
+    end
+  end
 end

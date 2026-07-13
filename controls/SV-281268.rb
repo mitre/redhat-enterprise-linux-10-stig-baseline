@@ -40,6 +40,7 @@ $ sudo systemctl restart sshd.service'
   tag cci: ['CCI-000068', 'CCI-002418', 'CCI-002421']
   tag nist: ['AC-17 (2)', 'SC-8', 'SC-8 (1)']
   tag 'host'
+  tag 'container-conditional'
 
   only_if('This control is Not Applicable to containers without SSH enabled', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?

@@ -31,17 +31,28 @@ enforce_for_root'
   tag 'host'
   tag 'container'
 
-  # TODO: use this pattern on the rest of the pwquality.conf settings (current implementation for the other ones dont account for multiple conf files)
-
   setting = 'enforce_for_root'
 
-  # NOTE: -s to supress if no files
-  # Note: -h to just have occurances and ignore filename
-  setting_check = command("grep -sh #{setting} /etc/security/pwquality.conf /etc/security/pwquality.conf/*").stdout.strip.match(/^#{setting}$/)
-  describe 'The root account' do
-    it 'should enforce password complexity rules' do
-      expect(setting_check).to_not be_nil, "'#{setting}' not found (or commented out) in conf file(s)"
-      expect(setting_check.length).to eq(1), "'#{setting}' set more than once in conf file(s)"
+  describe 'pwquality.conf settings for the root account' do
+    let(:config_files) do
+      ['/etc/security/pwquality.conf'] +
+        command("find /etc/security/pwquality.conf.d -maxdepth 1 -type f -name '*.conf' | sort").stdout.lines.map(&:strip)
+    end
+
+    let(:setting_value) do
+      config_files.flat_map do |path|
+        next [] unless file(path).file?
+
+        file(path).content.lines.grep(/^\s*#{Regexp.escape(setting)}\s*(?:#.*)?$/)
+      end
+    end
+
+    it "has `#{setting}` set" do
+      expect(setting_value).not_to be_empty, "#{setting} is not set in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "only sets `#{setting}` once" do
+      expect(setting_value.length).to eq(1), "#{setting} is set more than once in pwquality.conf or pwquality.conf.d/*.conf"
     end
   end
 end

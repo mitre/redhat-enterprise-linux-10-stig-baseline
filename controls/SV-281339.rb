@@ -30,7 +30,10 @@ Remove all unapproved tunnels from the system, or document them with the ISSO.'
   tag cci: ['CCI-000366', 'CCI-000213']
   tag nist: ['CM-6 b', 'AC-3']
   tag 'host'
-  tag 'container'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   describe service('ipsec') do
     it { should_not be_enabled }

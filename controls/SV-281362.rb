@@ -40,4 +40,24 @@ $ sudo systemctl reload NetworkManager'
   tag 'documentable'
   tag cci: ['CCI-002385', 'CCI-001115']
   tag nist: ['SC-5 a', 'SC-7 (9)']
+  tag 'host'
+  tag 'container'
+
+  only_if('Alternate DNS resolver is documented and ISSO-approved; this control is Not Applicable', impact: 0.0) {
+    !input('alt_dns_resolver')
+  }
+
+  network_manager = command('NetworkManager --print-config')
+
+  if network_manager.stdout == '' && !network_manager.stderr.empty?
+    describe 'NetworkManager' do
+      it 'should be installed' do
+        expect(network_manager.stdout).not_to be_empty, 'NetworkManager not found on system'
+      end
+    end
+  else
+    describe ini({ content: network_manager.stdout.strip }) do
+      its('main.dns') { should be_in ['none', 'default', 'systemd-resolved'] }
+    end
+  end
 end

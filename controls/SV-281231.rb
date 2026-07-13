@@ -23,4 +23,33 @@ Ensure the "sec" option is defined as "krb5p:krb5i:krb5".'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  required_sec_values = %w[krb5 krb5i krb5p]
+  nfs_file_systems = etc_fstab.nfs_file_systems.params
+  failing_mounts = nfs_file_systems.reject do |mnt|
+    sec_option = mnt['mount_options'].find { |option| option.start_with?('sec=') }
+    next false if sec_option.nil?
+
+    sec_values = sec_option.split('=', 2).last.split(':')
+    (required_sec_values - sec_values).empty? && (sec_values - required_sec_values).empty?
+  end
+
+  if nfs_file_systems.empty?
+    impact 0.0
+    describe 'N/A' do
+      skip 'No NFS mounts are configured'
+    end
+  else
+    describe 'Any mounted Network File System (NFS)' do
+      it 'should have sec configured for RPCSEC_GSS' do
+        formatted_mounts = failing_mounts.map { |mnt| "#{mnt['device_name']} #{mnt['mount_point']} #{mnt['file_system_type']} #{mnt['mount_options'].join(',')}" }
+        expect(failing_mounts).to be_empty, "NFS mounts without sec=krb5p:krb5i:krb5:\n\t- #{formatted_mounts.join("\n\t- ")}"
+      end
+    end
+  end
 end

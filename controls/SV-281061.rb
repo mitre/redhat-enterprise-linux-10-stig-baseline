@@ -23,4 +23,15 @@ $ sudo chmod 0755 /var/log'
   tag 'documentable'
   tag cci: ['CCI-001314']
   tag nist: ['SI-11 b']
+  tag 'host'
+  tag 'container'
+
+  system_file = '/var/log'
+
+  mode = input('expected_modes')[system_file]
+
+  describe directory(system_file) do
+    it { should exist }
+    it { should_not be_more_permissive_than(mode) }
+  end
 end

@@ -34,4 +34,16 @@ $ sudo systemctl restart sshd.service'
   tag 'documentable'
   tag cci: ['CCI-001813']
   tag nist: ['CM-5 (1) (a)']
+  tag 'host'
+  tag 'container-conditional'
+
+  only_if('This control is Not Applicable to containers without SSH installed', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system) || directory('/etc/ssh').exist?
+  }
+
+  use_kerberos = input('kerberos_required') ? 'yes' : 'no'
+
+  describe sshd_config do
+    its('KerberosAuthentication') { should cmp use_kerberos }
+  end
 end

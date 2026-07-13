@@ -27,4 +27,19 @@ $ sudo service auditd restart'
   tag 'documentable'
   tag cci: ['CCI-001855']
   tag nist: ['AU-5 (1)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('alternative_logging_method') == ''
+    describe auditd_conf do
+      its('space_left.to_i') { should cmp >= input('audit_storage_threshold') }
+    end
+  else
+    describe 'manual check' do
+      skip 'Manual check required. Ask the administrator to indicate how logging is done for this system.'
+    end
+  end
 end

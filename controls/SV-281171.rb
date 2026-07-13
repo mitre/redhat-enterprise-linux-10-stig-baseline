@@ -21,4 +21,10 @@ CREATE_HOME yes'
   tag 'documentable'
   tag cci: ['CCI-002824']
   tag nist: ['SI-16']
+  tag 'host'
+  tag 'container'
+
+  describe login_defs do
+    its('CREATE_HOME') { should eq 'yes' }
+  end
 end

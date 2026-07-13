@@ -53,6 +53,11 @@ permissive = 0'
   tag 'documentable'
   tag cci: ['CCI-001764', 'CCI-001774']
   tag nist: ['CM-7 (2)', 'CM-7 (5) (b)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   describe file('/etc/fapolicyd/fapolicyd.conf') do
     its('content') { should include 'permissive = 0' }

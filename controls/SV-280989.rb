@@ -41,34 +41,16 @@ $ sudo systemctl restart rsyslog'
   tag cci: ['CCI-001851']
   tag nist: ['AU-4 (1)']
   tag 'host'
-  tag 'container'
 
-  setting = 'DefaultNetstreamDriver'
-  expected_value = 'gtls'
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
-  pattern = /[^#]\$#{setting}\s*(?<value>\w+)$/
-  setting_check = command("grep -i #{setting} /etc/rsyslog.conf /etc/rsyslog.d/*.conf").stdout.strip.scan(pattern).flatten
+  streamdriver_check = command("grep -iEh 'StreamDriver[[:space:]]*=[[:space:]]*\"(gtls|ossl)\"' #{input('logging_conf_files').join(' ')} | grep -vE '^[[:space:]]*#'").stdout.strip
 
-  describe 'Rsyslogd DefaultNetstreamDriver' do
-    if setting_check.empty?
-      it 'should be set' do
-        expect(setting_check).to_not be_empty, "'#{setting}' not found (or commented out) in conf file(s)"
-      end
-    else
-      it 'should only be set once' do
-        expect(setting_check.length).to eq(1), "'#{setting}' set more than once in conf file(s)"
-      end
-      it "should be set to '#{expected_value}'" do
-        expect(setting_check.first).to eq(expected_value), "'#{setting}' set to '#{setting_check.first}' in conf file(s)"
-      end
+  describe 'Rsyslogd omfwd StreamDriver' do
+    it 'should be set to gtls or ossl' do
+      expect(streamdriver_check).to_not be_empty, 'StreamDriver set to gtls or ossl not found (or commented out) in conf file(s)'
     end
   end
-
-  # netstream_driver = command('grep -i $DefaultNetstreamDriver /etc/rsyslog.conf /etc/rsyslog.d/*').stdout.strip
-
-  # describe "Rsyslog config" do
-  #   it "should encrypt audit records for transfer" do
-  #     expect(modload).to be_empty, "ModLoad settings found:\n\t- #{modload.join("\n\t- ")}"
-  #   end
-  # end
 end

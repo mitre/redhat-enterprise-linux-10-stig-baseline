@@ -32,4 +32,22 @@ $ systemctl enable --now fapolicyd'
   tag 'documentable'
   tag cci: ['CCI-001774', 'CCI-001764']
   tag nist: ['CM-7 (5) (b)', 'CM-7 (2)']
+  tag 'host'
+
+  if %w[docker podman kubepods lxc].include?(virtualization.system)
+    impact 0.0
+    describe 'This requirement is Not Applicable in the container' do
+      skip 'This requirement is Not Applicable in the container'
+    end
+  elsif !input('use_fapolicyd')
+    impact 0.0
+    describe 'The organization does not use the Fapolicyd service to manage firewall services' do
+      skip 'The organization is not using the Fapolicyd service to manage firewall services; this control is Not Applicable'
+    end
+  else
+    describe service('fapolicyd') do
+      it { should be_enabled }
+      it { should be_running }
+    end
+  end
 end

@@ -23,4 +23,16 @@ $ sudo dnf -y remove tftp'
   tag 'documentable'
   tag cci: ['CCI-000197']
   tag nist: ['IA-5 (1) (c)']
+  tag 'host'
+  tag 'container'
+
+  if input('tftp_required')
+    describe package('tftp') do
+      it { should be_installed }
+    end
+  else
+    describe package('tftp') do
+      it { should_not be_installed }
+    end
+  end
 end

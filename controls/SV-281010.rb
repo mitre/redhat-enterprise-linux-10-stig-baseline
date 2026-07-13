@@ -38,13 +38,26 @@ Note: Systemwide crypto policies are applied on application startup. It is recom
   tag 'documentable'
   tag cci: ['CCI-001453', 'CCI-000068', 'CCI-000877', 'CCI-002890', 'CCI-003123', 'CCI-002418']
   tag nist: ['AC-17 (2)', 'MA-4 c', 'MA-4 (6)', 'SC-8']
+  tag 'host'
+  tag 'container-conditional'
 
   only_if('Control not applicable - SSH is not installed within containerized RHEL', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || file('/etc/ssh/sshd_config').exist?
   }
 
+  approved_ciphers = input('approved_openssh_client_conf')['ciphers']
+
   describe file('/etc/crypto-policies/back-ends/openssh.config') do
     it { should exist }
-    its('content') { should match(/^\s*Ciphers\s+aes256-gcm@openssh\.com,aes256-ctr,aes128-gcm@openssh\.com,aes128-ctr\s*$/) }
+  end
+
+  options = { assignment_regex: /^(\S+)\s+(.+)$/ }
+  openssh_conf = parse_config_file('/etc/crypto-policies/back-ends/openssh.config', options).params.to_h { |k, v| [k.downcase, v.to_s.split(',').map(&:strip)] }
+  actual_ciphers = openssh_conf['ciphers'] || []
+
+  describe 'OpenSSH client configuration' do
+    it 'implements approved encryption ciphers' do
+      expect(actual_ciphers).to eq(approved_ciphers), "OpenSSH client cipher configuration actual value:\n\t#{actual_ciphers.inspect}\ndoes not match the expected value:\n\t#{approved_ciphers.inspect}"
+    end
   end
 end

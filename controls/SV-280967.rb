@@ -22,4 +22,13 @@ $ sudo dnf -y install policycoreutils-python-utils'
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe package('policycoreutils-python-utils') do
+    it { should be_installed }
+  end
 end

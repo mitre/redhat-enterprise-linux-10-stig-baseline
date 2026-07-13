@@ -23,4 +23,18 @@ $ sudo chgrp root /var/log/messages'
   tag 'documentable'
   tag cci: ['CCI-001314']
   tag nist: ['SI-11 b']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe.one do
+    describe file('/var/log/messages') do
+      its('group') { should be_in input('var_log_messages_group') }
+    end
+    describe file('/var/log/messages') do
+      it { should_not exist }
+    end
+  end
 end

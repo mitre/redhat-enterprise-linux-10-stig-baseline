@@ -26,6 +26,10 @@ pam_cert_auth = True'
   tag nist: ['IA-2 (1)', 'IA-2 (11)', 'IA-2 (6) (a)', 'IA-2 (6) (b)', 'IA-2 (2)']
   tag 'host'
 
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
   only_if('If the System Administrator demonstrates the use of an approved alternate multifactor authentication method, this requirement is not applicable.', impact: 0.0) {
     input('smart_card_enabled')
   }

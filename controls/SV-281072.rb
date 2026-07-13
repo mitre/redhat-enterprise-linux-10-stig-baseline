@@ -24,7 +24,7 @@ $ sudo chmod 0000 /etc/shadow-'
   tag 'host'
   tag 'container'
 
-  system_file = '/etc/gshadow'
+  system_file = '/etc/shadow-'
 
   mode = input('expected_modes')[system_file]
 

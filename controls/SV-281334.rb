@@ -24,4 +24,19 @@ $ sudo ip link set dev <devicename> multicast off promisc off'
   tag 'documentable'
   tag cci: ['CCI-002418']
   tag nist: ['SC-8']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('promiscuous_mode_permitted')
+    describe command('ip link | grep -i promisc') do
+      its('stdout.strip') { should_not match(/^$/) }
+    end
+  else
+    describe command('ip link | grep -i promisc') do
+      its('stdout.strip') { should match(/^$/) }
+    end
+  end
 end

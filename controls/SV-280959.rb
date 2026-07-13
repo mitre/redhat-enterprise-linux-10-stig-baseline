@@ -23,4 +23,14 @@ $ sudo systemctl enable --now chronyd'
   tag 'documentable'
   tag cci: ['CCI-004923']
   tag nist: ['SC-45 (1) (a)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  describe service('chronyd') do
+    it { should be_enabled }
+    it { should be_running }
+  end
 end

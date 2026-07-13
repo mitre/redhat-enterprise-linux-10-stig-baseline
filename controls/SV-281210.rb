@@ -34,6 +34,7 @@ Defaults !runaspw)
   tag cci: ['CCI-002227', 'CCI-000366', 'CCI-002038']
   tag nist: ['AC-6 (5)', 'CM-6 b', 'IA-11']
   tag 'host'
+  tag 'container-conditional'
 
   only_if('This control is Not Applicable to containers without sudo installed', impact: 0.0) {
     !%w[docker podman kubepods lxc].include?(virtualization.system) || command('sudo').exist?

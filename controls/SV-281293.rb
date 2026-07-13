@@ -40,7 +40,7 @@ $ sudo grubby --update-kernel=ALL --remove-args=noexec'
   grubby_output = command("grubby --info=ALL | grep args | grep -E '([^[:alnum:]])(noexec)([^[:alnum:]])'").stdout.strip
 
   describe 'ExecShield' do
-    it 'is enabled on 64-bit RHEL 9 systems' do
+    it 'is enabled on 64-bit RHEL 10 systems' do
       expect(grep_output).to be_empty
       expect(grubby_output).to be_empty
     end

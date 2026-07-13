@@ -55,17 +55,28 @@ Confirm password:'
   end
 
   if file(grubfile).exist? && file(grub_userfile).exist?
-    password_set = file(grubfile).content.lines.select { |line| line.match(/password_pbkdf2\s+\w+\s+\$\{\w+\}/) }
+    password_set = file(grubfile).content.to_s.lines.select { |line| line.match(/password_pbkdf2\s+\w+\s+\$\{\w+\}/) }
 
     describe 'The GRUB bootloader superuser password' do
       it "should be set in the GRUB config file ('#{grubfile}')" do
         expect(password_set).to_not be_empty, "No bootloader superuser password set in '#{grubfile}'"
       end
 
-      grub_envar = password_set.first.match(/\$\{(?<grub_pw_envar>\w+)\}/).captures.first
-      password_encrypted = file(grub_userfile).content.match?(/#{grub_envar}=grub.pbkdf2/)
-      it "should be encrypted in the user config file ('#{grub_userfile}')" do
-        expect(password_encrypted).to eq(true), "GRUB password environment variable not set to an encrypted value in '#{grub_userfile}'"
+      unless password_set.empty?
+        grub_envar_match = password_set.first.match(/\$\{(?<grub_pw_envar>\w+)\}/)
+
+        it "should reference a password environment variable in the GRUB config file ('#{grubfile}')" do
+          expect(grub_envar_match).to_not be_nil, "No GRUB password environment variable found in '#{grubfile}'"
+        end
+
+        unless grub_envar_match.nil?
+          grub_envar = grub_envar_match[:grub_pw_envar]
+          password_encrypted = file(grub_userfile).content.to_s.match?(/#{grub_envar}=grub.pbkdf2/)
+
+          it "should be encrypted in the user config file ('#{grub_userfile}')" do
+            expect(password_encrypted).to eq(true), "GRUB password environment variable not set to an encrypted value in '#{grub_userfile}'"
+          end
+        end
       end
     end
   end

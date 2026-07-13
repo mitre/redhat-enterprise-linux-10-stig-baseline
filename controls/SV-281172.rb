@@ -23,4 +23,13 @@ Edit the file "/etc/passwd", and provide each interactive user account that has 
   tag 'documentable'
   tag cci: ['CCI-000764', 'CCI-000804']
   tag nist: ['IA-2', 'IA-8']
+  tag 'host'
+  tag 'container'
+
+  user_count = passwd.where { uid.to_i >= 1000 }.entries.length
+
+  describe "Count of interactive unique user IDs should match interactive user count (#{user_count}): UID count" do
+    subject { passwd.where { uid.to_i >= 1000 }.uids.uniq.length }
+    it { should eq user_count }
+  end
 end

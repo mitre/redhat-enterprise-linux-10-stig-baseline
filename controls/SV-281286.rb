@@ -53,7 +53,7 @@ $ sudo dconf update'
     output = command('gsettings get org.gnome.settings-daemon.plugins.media-keys logout').stdout.strip
     describe 'GNOME desktop should be configured to ignore the Ctrl-Alt-Del sequence' do
       subject { output }
-      it { should cmp "['']" }
+      it { should cmp '@as []' }
     end
   end
 end

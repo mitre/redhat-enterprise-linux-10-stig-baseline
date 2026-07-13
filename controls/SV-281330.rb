@@ -37,4 +37,21 @@ $ sudo systemctl restart sssd.service'
   tag 'documentable'
   tag cci: ['CCI-000187']
   tag nist: ['IA-5 (2) (a) (2)']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  if input('alternate_mfa_method') == ''
+    describe file('/etc/sssd/sssd.conf') do
+      it { should exist }
+      its('content') { should match(/^\s*\[certmap.*\]\s*$/) }
+    end
+  else
+    impact 0.0
+    describe 'N/A' do
+      skip 'The system is using an approved alternative MFA method; this control is Not Applicable.'
+    end
+  end
 end

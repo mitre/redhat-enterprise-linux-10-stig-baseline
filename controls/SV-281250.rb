@@ -41,6 +41,7 @@ Remove any configurations that conflict with the above from the following locati
   tag legacy: ['SV-70979', 'V-56719']
   tag cci: ['CCI-002235']
   tag nist: ['AC-6 (10)']
+  tag 'host'
 
   only_if('Control not applicable within a container without sudo enabled', impact: 0.0) do
     !%w[docker podman kubepods lxc].include?(virtualization.system)

@@ -23,4 +23,16 @@ $ sudo chgrp root /boot/grub2/grub.cfg'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+
+  only_if('Control not applicable within a container', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  grubfile = input('grub_conf_path')
+
+  describe file(grubfile) do
+    it { should exist }
+    its('group') { should cmp 'root' }
+  end
 end

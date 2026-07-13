@@ -22,4 +22,14 @@ $ sudo rm /[path]/[to]/[file]/.shosts'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+  tag 'container'
+
+  shosts_files = command('find / -xdev -xautofs -name .shosts').stdout.strip.split("\n")
+
+  describe 'The RHEL10 filesystem' do
+    it 'should not have any .shosts files present' do
+      expect(shosts_files).to be_empty, "Discovered .shosts files:\n\t- #{shosts_files.join("\n\t- ")}"
+    end
+  end
 end

@@ -20,4 +20,37 @@ If a separate entry for "/home" is not in use, this is a finding.'
   tag 'documentable'
   tag cci: ['CCI-002385']
   tag nist: ['SC-5 a']
+  tag 'host'
+
+  only_if('This requirement is Not Applicable inside a container; the host manages the container filesystem') {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  ignore_shells = input('non_interactive_shells').join('|')
+  homes = users.where { uid >= 1000 && !shell.match(ignore_shells) }.homes
+  root_device = etc_fstab.where { mount_point == '/' }.device_name
+
+  if input('exempt_separate_filesystem')
+    impact 0.0
+    describe 'This system is not required to have separate filesystems for each mount point' do
+      skip 'The system is managing filesystems and space via other mechanisms; this requirement is Not Applicable'
+    end
+  else
+    homes.each do |home|
+      pn_parent = Pathname.new(home).parent.to_s
+      home_device = etc_fstab.where { mount_point == pn_parent }.device_name
+
+      describe "The '#{pn_parent}' mount point" do
+        subject { home_device }
+
+        it 'is not on the same partition as the root partition' do
+          is_expected.not_to equal(root_device)
+        end
+
+        it 'has its own partition' do
+          is_expected.not_to be_empty
+        end
+      end
+    end
+  end
 end

@@ -44,7 +44,10 @@ Obtain a valid copy of the DOD root CA file from the PKI CA certificate bundle f
   tag cci: ['CCI-000185', 'CCI-001991', 'CCI-004068', 'CCI-004909', 'CCI-004910']
   tag nist: ['IA-5 (2) (a)', 'IA-5 (2) (b) (1)', 'IA-5 (2) (d)', 'IA-5 (2) (b) (2)', 'SC-17 b', 'SC-28 (3)']
   tag 'host'
-  tag 'container'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
 
   only_if('If the System Administrator demonstrates the use of an approved alternate multifactor authentication method, this requirement is not applicable.', impact: 0.0) {
     !input('smart_card_enabled') && input('alternate_mfa_method') == ''

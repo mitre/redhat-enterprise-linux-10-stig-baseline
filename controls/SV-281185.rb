@@ -35,18 +35,32 @@ difok = 8'
   setting = 'difok'
   expected_value = input('difok')
 
-  pattern = /^[^#]*#{setting}\s*=\s*(?<value>\d+)$/
-  setting_check = command("grep #{setting} /etc/security/pwquality.conf /etc/security/pwquality.conf/*.conf").stdout.strip.scan(pattern).flatten
+  describe 'pwquality.conf settings' do
+    let(:config_files) do
+      ['/etc/security/pwquality.conf'] +
+        command("find /etc/security/pwquality.conf.d -maxdepth 1 -type f -name '*.conf' | sort").stdout.lines.map(&:strip)
+    end
 
-  describe 'Password settings for the root account' do
-    it 'should be set' do
-      expect(setting_check).to_not be_empty, "'#{setting}' not found (or commented out) in conf file(s)"
+    let(:setting_value) do
+      config_files.flat_map do |path|
+        next [] unless file(path).file?
+
+        config = parse_config_file(path, multiple_values: true)
+        value = config.params[setting]
+        value.is_a?(Integer) ? [value] : Array(value)
+      end
     end
-    it 'should only be set once' do
-      expect(setting_check.length).to eq(1), "'#{setting}' set more than once in conf file(s)"
+
+    it "has `#{setting}` set" do
+      expect(setting_value).not_to be_empty, "#{setting} is not set in pwquality.conf or pwquality.conf.d/*.conf"
     end
-    it "should be set to be >= #{expected_value}" do
-      expect(setting_check.first.to_i).to be >= expected_value, "'#{setting}' set to less than '#{expected_value}' in conf file(s)"
+
+    it "only sets `#{setting}` once" do
+      expect(setting_value.length).to eq(1), "#{setting} is set more than once in pwquality.conf or pwquality.conf.d/*.conf"
+    end
+
+    it "sets `#{setting}` to at least #{expected_value}" do
+      expect(setting_value.first.to_i).to be >= expected_value.to_i, "#{setting} is set to less than #{expected_value} in pwquality.conf or pwquality.conf.d/*.conf"
     end
   end
 end

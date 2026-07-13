@@ -27,4 +27,33 @@ $ sudo chmod 0750 /home/disauser)
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+  tag 'host'
+
+  only_if('This control is Not Applicable to containers', impact: 0.0) {
+    !%w[docker podman kubepods lxc].include?(virtualization.system)
+  }
+
+  exempt_home_users = input('exempt_home_users')
+  expected_mode = input('expected_modes')['home_dirs']
+  uid_min = login_defs.read_params['UID_MIN'].to_i
+  uid_min = 1000 if uid_min.nil?
+
+  iuser_entries = passwd.where { uid.to_i >= uid_min && shell !~ /nologin/ && !exempt_home_users.include?(user) }
+
+  if !iuser_entries.users.nil? && !iuser_entries.users.empty?
+    failing_homedirs = iuser_entries.homes.select { |home|
+      file(home).more_permissive_than?(expected_mode)
+    }
+    describe 'All non-exempt interactive user account home directories on the system' do
+      it "should not be more permissive than '#{expected_mode}'" do
+        expect(failing_homedirs).to be_empty, "Failing home directories:\n\t- #{failing_homedirs.join("\n\t- ")}"
+      end
+    end
+  else
+    describe 'No non-exempt interactive user accounts' do
+      it 'were detected on the system' do
+        expect(true).to eq(true)
+      end
+    end
+  end
 end

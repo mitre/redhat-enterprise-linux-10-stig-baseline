@@ -18,12 +18,12 @@ storage repositories combined), or both.'
 Find the alias maps that are being used with the following command:
 
 $ postconf alias_maps
-alias_maps = hash:/etc/aliases
+alias_maps = lmdb:/etc/aliases
 
 Query the Postfix alias maps for an alias for the root user with the following command:
 
-$ postmap -q root hash:/etc/aliases
-isso
+$ postmap -q root lmdb:/etc/aliases
+ISSO
 
 If an alias is not set, this is a finding.'
   desc 'fix', 'Configure RHEL 10 to have mail aliases notify the ISSO and SA (at a minimum) of an audit processing failure.
@@ -39,7 +39,7 @@ $ sudo newaliases'
   tag severity: 'medium'
   tag gtitle: 'SRG-OS-000046-GPOS-00022'
   tag gid: 'V-280998'
-  tag rid: 'SV-280998r1165349_rule'
+  tag rid: 'SV-280998r1208794_rule'
   tag stig_id: 'RHEL-10-200691'
   tag fix_id: 'F-85464r1165348_fix'
   tag cci: ['CCI-000139']
@@ -59,8 +59,8 @@ $ sudo newaliases'
       end
     end
   else
-    describe command('grep "postmaster:\s*root$" /etc/aliases') do
-      its('stdout.strip') { should match(/postmaster:\s*root/) }
+    describe command('postmap -q root lmdb:/etc/aliases') do
+      its('stdout.strip') { should_not be_empty }
     end
   end
 end

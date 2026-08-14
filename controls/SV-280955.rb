@@ -11,6 +11,7 @@ RHEL 10 functionality (e.g., Secure Shell [SSH]) must be capable of taking enfor
 
 Run the following command to determine if the "firewalld" package is installed:
 
+$ dnf list --installed firewalld
 Installed Packages
 firewalld.noarch                             2.3.1-1.el10_0                              @rhel-10-for-x86_64-baseos-rpms
 
@@ -22,10 +23,10 @@ $ sudo dnf -y install firewalld'
   tag severity: 'medium'
   tag gtitle: 'SRG-OS-000096-GPOS-00050'
   tag gid: 'V-280955'
-  tag rid: 'SV-280955r1197220_rule'
+  tag rid: 'SV-280955r1208792_rule'
   tag stig_id: 'RHEL-10-200530'
   tag fix_id: 'F-85421r1165219_fix'
-  tag cci: ['CCI-002314', 'CCI-000366', 'CCI-000382', 'CCI-002322']
+  tag cci: ['CCI-000366', 'CCI-000382']
   tag nist: ['AC-17 (1)', 'CM-6 b', 'CM-7 b', 'AC-17 (9)']
   tag 'host'
 

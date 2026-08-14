@@ -5,8 +5,8 @@ control 'SV-281221' do
 Passwords must be protected at all times, and encryption is the standard method for protecting passwords. If passwords are not encrypted, they can be plainly read (i.e., clear text) and easily compromised.'
   desc 'check', 'Verify RHEL 10 employs FIPS 140-3-approved cryptographic hashing algorithms for all stored passwords for interactive user accounts with the following command:
 
-$ sudo cut -d: -f2 /etc/shadow
-$6$kcOnRq/5$NUEYPuyL.wghQwWssXRcLRFiiru7f5JPV6GaJhNC2aK5F3PZpE/BCCtwrxRc/AInKMNX3CdMw11m9STiql12f/
+$ sudo cut -d: -f1,2 /etc/shadow
+nsauser:$6$kcOnRq/5$NUEYPuyL.wghQwWssXRcLRFiiru7f5JPV6GaJhNC2aK5F3PZpE/BCCtwrxRc/AInKMNX3CdMw11m9STiql12f/
 
 Password hashes "!" or "*" indicate inactive accounts not available for login and are not evaluated.
 
@@ -18,7 +18,7 @@ Lock all interactive user accounts not using SHA-512 hashing until the passwords
   tag severity: 'high'
   tag gtitle: 'SRG-OS-000073-GPOS-00041'
   tag gid: 'V-281221'
-  tag rid: 'SV-281221r1166615_rule'
+  tag rid: 'SV-281221r1208797_rule'
   tag stig_id: 'RHEL-10-600730'
   tag fix_id: 'F-85687r1166614_fix'
   tag cci: ['CCI-000196', 'CCI-000803', 'CCI-004062']

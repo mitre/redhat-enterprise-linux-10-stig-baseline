@@ -8,17 +8,17 @@ This setting ensures user and group account administration utilities are configu
 $ sudo grep crypt /etc/libuser.conf
 crypt_style = sha512
 
-If the "crypt_style" variable is not set to "yescrypt", is not in the defaults section, is commented out, or does not exist, this is a finding.'
+If the "crypt_style" variable is not set to "sha512", is not in the defaults section, is commented out, or does not exist, this is a finding.'
   desc 'fix', 'Configure RHEL 10 to use the SHA-512 algorithm for password hashing.
 
 Add or change the following line in the "[default]" section of the "/etc/libuser.conf" file:
 
 crypt_style = sha512'
   impact 0.7
-  tag check_id: 'C-85784r1166619_chk'
+  tag check_id: 'C-85784r1208383_chk'
   tag severity: 'high'
   tag gid: 'V-281223'
-  tag rid: 'SV-281223r1166621_rule'
+  tag rid: 'SV-281223r1208798_rule'
   tag stig_id: 'RHEL-10-600750'
   tag gtitle: 'SRG-OS-000073-GPOS-00041'
   tag fix_id: 'F-85689r1166620_fix'

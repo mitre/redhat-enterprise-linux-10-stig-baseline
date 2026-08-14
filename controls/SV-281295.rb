@@ -7,7 +7,7 @@ $ sudo grep -i tmout /etc/profile /etc/profile.d/*.sh
 /etc/profile.d/tmout.sh:declare -xr TMOUT=600
 
 If "TMOUT" is not set to "600" or less in a script located in the "/etc/'profile.d/" directory, is missing, or is commented out, this is a finding.)
-  desc 'fix', 'Configure RHEL 10 to exit interactive command shell user sessions after 15 minutes of inactivity.
+  desc 'fix', 'Configure RHEL 10 to exit interactive command shell user sessions after 10 minutes of inactivity.
 
 Add or edit the following line in "/etc/profile.d/tmout.sh":
 
@@ -18,13 +18,13 @@ declare -xr TMOUT=600'
   tag check_id: 'C-85856r1166835_chk'
   tag severity: 'medium'
   tag gid: 'V-281295'
-  tag rid: 'SV-281295r1166837_rule'
+  tag rid: 'SV-281295r1208800_rule'
   tag stig_id: 'RHEL-10-700920'
   tag gtitle: 'SRG-OS-000163-GPOS-00072'
-  tag fix_id: 'F-85761r1166836_fix'
+  tag fix_id: 'F-85761r1208391_fix'
   tag satisfies: ['SRG-OS-000163-GPOS-00072', 'SRG-OS-000029-GPOS-00010']
   tag 'documentable'
-  tag cci: ['CCI-000057', 'CCI-001133']
+  tag cci: ['CCI-001133']
   tag nist: ['AC-11 a', 'SC-10']
   tag 'host'
   tag 'container'

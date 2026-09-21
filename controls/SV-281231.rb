@@ -26,7 +26,7 @@ Ensure the "sec" option is defined as "krb5p:krb5i:krb5".'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   required_sec_values = %w[krb5 krb5i krb5p]

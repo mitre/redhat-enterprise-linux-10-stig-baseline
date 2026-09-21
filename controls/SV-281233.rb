@@ -30,7 +30,7 @@ $ sudo mount -o remount /boot'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   describe mount('/boot') do

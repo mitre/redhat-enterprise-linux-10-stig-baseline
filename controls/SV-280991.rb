@@ -39,7 +39,7 @@ $ sudo systemctl restart rsyslog.service'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
   describe.one do
     describe command("grep  -hsv \"^#\" #{input('logging_conf_files').join(' ')} | grep ^cron") do

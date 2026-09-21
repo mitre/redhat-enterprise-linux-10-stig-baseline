@@ -34,7 +34,7 @@ $ sudo mount -o remount /var'
   tag 'host'
 
   only_if('Control not applicable within a container', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   path = '/var'

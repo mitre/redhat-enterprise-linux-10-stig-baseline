@@ -43,7 +43,7 @@ $ sudo service auditd restart'
   audit_syscalls = ['chown', 'fchown', 'fchownat', 'lchown']
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   describe 'Syscall' do

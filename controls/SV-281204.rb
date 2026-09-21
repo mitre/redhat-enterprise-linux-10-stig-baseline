@@ -33,7 +33,7 @@ retry = 3'
   tag 'host'
 
   only_if('This control is Not Applicable for containers', impact: 0.0) do
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   end
 
   setting = 'retry'

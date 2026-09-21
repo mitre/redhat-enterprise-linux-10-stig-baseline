@@ -26,7 +26,7 @@ $ sudo systemctl restart chronyd'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system) && file('/etc/chrony.conf').exist?
+    !virtualization.container_system? && file('/etc/chrony.conf').exist?
   }
 
   chrony_conf = ntp_conf('/etc/chrony.conf')

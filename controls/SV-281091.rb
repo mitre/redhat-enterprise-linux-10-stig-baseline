@@ -24,7 +24,7 @@ Modify "/etc/fstab" to use the "nodev" option on the "/var/log/audit" directory.
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   path = '/var/log/audit'

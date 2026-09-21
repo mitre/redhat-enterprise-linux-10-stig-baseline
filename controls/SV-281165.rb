@@ -41,7 +41,7 @@ $ sudo service auditd restart'
   audit_syscalls = ['rename', 'unlink', 'rmdir', 'renameat', 'renameat2', 'unlinkat']
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   describe 'Syscall' do

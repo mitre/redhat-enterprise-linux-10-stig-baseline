@@ -31,7 +31,7 @@ $ sudo grubby --update-kernel=ALL --args="page_poison=1"'
   tag 'host'
 
   only_if('Control not applicable within a container', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   grub_stdout = command('grubby --info=ALL').stdout

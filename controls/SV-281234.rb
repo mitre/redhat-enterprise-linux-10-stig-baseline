@@ -32,7 +32,7 @@ $ sudo mount -o remount /boot/efi'
   tag 'host'
 
   only_if('This requirement is Not Applicable in the container', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   boot_efi_path = input('boot_efi_mountpoint')

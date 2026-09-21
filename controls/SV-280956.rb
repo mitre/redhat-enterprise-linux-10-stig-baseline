@@ -35,7 +35,7 @@ $ sudo systemctl enable --now firewalld'
   tag 'host'
 
   only_if('This requirment is Not Applicable in the container, the container management platform manages the firewall service', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   if input('external_firewall')

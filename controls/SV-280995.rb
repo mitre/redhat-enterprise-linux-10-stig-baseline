@@ -25,7 +25,7 @@ $ sudo dnf -y install audispd-plugins'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   describe package('audispd-plugins') do

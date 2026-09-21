@@ -34,6 +34,10 @@ suites:
   - name: hardened
     provisioner:
       playbook: spec/ansible/roles/ansible-role-rhel-hardened.yml
+      extra_vars:
+        # The LXD image uses a password-locked SSH-key account with passwordless sudo.
+        # Skip the sudo-password rule and its account-lock precheck for this CI suite.
+        rhel10cis_rule_5_2_4: false
     driver:
       tags:
         Name: Hardened-<%= ENV['USER'] %>

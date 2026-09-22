@@ -37,7 +37,7 @@ $ sudo service auditd restart'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
   describe command('grep "^\s*[^#]" /etc/audit/audit.rules | tail -1') do
     its('stdout.strip') { should cmp '-e 2' }

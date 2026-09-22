@@ -38,7 +38,7 @@ Replace "[audit_tool]" with each audit tool that has a mode more permissive than
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   audit_tools = input('audit_tools')

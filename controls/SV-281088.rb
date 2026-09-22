@@ -28,7 +28,7 @@ Modify "/etc/fstab" to use the "nodev" option on the "/home" directory.'
   tag 'host'
 
   only_if('Control not applicable within a container', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   interactive_users = passwd.where {

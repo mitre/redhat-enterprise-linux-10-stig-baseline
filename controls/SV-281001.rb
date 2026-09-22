@@ -35,7 +35,7 @@ $ sudo dnf -y install openssh-server'
   openssh_present = package('openssh-server').installed?
 
   only_if('This requirement is Not Applicable in a container without OpenSSH installed or when physical protections are employed', impact: 0.0) do
-    openssh_present || input('physical_protections_employed') || !%w[docker podman kubepods lxc].include?(virtualization.system)
+    openssh_present || input('physical_protections_employed') || !virtualization.container_system?
   end
 
   if input('allow_container_openssh_server') == false

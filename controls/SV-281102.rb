@@ -30,7 +30,7 @@ The setting will be applied on reboot.'
   tag 'host'
 
   only_if('Control not applicable within a container without sudo enabled', impact: 0.0) do
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   end
 
   expected_audit_backlog_limit = input('expected_audit_backlog_limit')

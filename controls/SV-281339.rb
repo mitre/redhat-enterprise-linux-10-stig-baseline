@@ -32,7 +32,7 @@ Remove all unapproved tunnels from the system, or document them with the ISSO.'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   describe service('ipsec') do

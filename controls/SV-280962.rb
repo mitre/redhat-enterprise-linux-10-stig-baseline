@@ -40,7 +40,7 @@ Note: USBGuard must be configured to allow authorized devices once it is enabled
   tag 'host'
 
   only_if('This requirement is Not Applicable in the container', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   peripherals_package = input('peripherals_package')

@@ -36,7 +36,7 @@ $ sudo sysctl --system'
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   only_if('This system is acting as a router on the network; this control is Not Applicable', impact: 0.0) {

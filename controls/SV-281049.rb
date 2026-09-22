@@ -38,7 +38,7 @@ $ sudo chgrp users /home/disauser)
   tag 'host'
 
   only_if('This control is Not Applicable to containers', impact: 0.0) {
-    !%w[docker podman kubepods lxc].include?(virtualization.system)
+    !virtualization.container_system?
   }
 
   exempt_home_users = input('exempt_home_users')

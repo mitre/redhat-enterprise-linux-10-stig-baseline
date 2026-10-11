@@ -35,8 +35,8 @@ Red Hat 10 does not support switching to strict FIPS mode after installation.'
       skip 'This control is Not Applicable as FIPS is not required for this system'
     end
   else
-    describe command('fips-mode-setup --check') do
-      its('stdout.strip') { should match(/FIPS mode is enabled/) }
+    describe file('/proc/sys/crypto/fips_enabled') do
+      its('content.strip') { should cmp '1' }
     end
   end
 end
